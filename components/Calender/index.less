@@ -1,0 +1,108 @@
+.main {
+  :global {
+    .fc {
+      .fc-header-toolbar {
+        .fc-toolbar-chunk {
+          position: relative;
+          > div {
+            display: flex;
+            align-items: center;
+            > button.fc-button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 60px;
+              height: 32px;
+              padding: 0;
+              color: #416eff;
+              background-color: transparent;
+              border: none;
+              box-shadow: 0 0;
+              span.fc-icon {
+                display: flex;
+                align-items: center;
+                line-height: 0;
+              }
+            }
+            > h2 {
+              margin: 0 20px;
+              font-size: 18px;
+            }
+          }
+          > button.fc-button {
+            position: absolute;
+            top: 0;
+            right: -100px;
+            bottom: 0;
+            width: 60px;
+            height: 32px;
+            margin-left: 0;
+            line-height: 0;
+            background-color: #416eff;
+            border: none;
+            box-shadow: 0 0;
+          }
+        }
+      }
+      .fc-view-harness .fc-scrollgrid {
+        thead {
+          tr {
+            th {
+              height: 40px;
+              border-color: #e1e9f8;
+              border-left: none;
+              .fc-scroller {
+                overflow: hidden !important;
+                a {
+                  font-weight: 500;
+                  font-size: 16px;
+                  line-height: 36px;
+                  cursor: default;
+                }
+              }
+              &.fc-day-today {
+                background-color: #e0f1ff; // 今天
+                a {
+                  color: #416eff; // 今天
+                }
+              }
+            }
+          }
+        }
+        tbody {
+          :global(.fc-day-grid-event .fc-content) {
+            white-space: normal !important;
+          }
+          tr {
+            td {
+              height: 24px;
+              border-color: #e1e9f8;
+              &.fc-timegrid-slot-label {
+                font-size: 14px;
+              }
+              &.fc-day-today {
+                background-color: #e0f1ff; // 今天
+              }
+              .fc-timegrid-event-harness .fc-v-event {
+                position: relative;
+                // background-color: var(--theme-pro-table-bk);
+                background-color: #fff;
+                border: none;
+                border-left: 4px solid;
+                border-radius: 0 4px 4px 0;
+                box-shadow: 2px 2px 4px 0 rgba(57, 78, 145, 0.1);
+                .fc-event-main {
+                  padding: 5px 0 5px 4px;
+                  .fc-event-main-frame {
+                    // color: var(--theme-text-color);
+                    color: #373a44;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
