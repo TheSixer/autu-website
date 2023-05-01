@@ -863,6 +863,14 @@ button {
         animation: sticky 1.2s;
 }
 
+.site-header-one.white-thime {
+  background-color: white !important;
+}
+
+.site-header-one.white-thime .main-nav__main-navigation .main-nav__navigation-box > li > a {
+  color: #000;
+}
+
 @-webkit-keyframes sticky {
 0% {
   top: -200px;
@@ -5983,4 +5991,19 @@ button {
 .login-form-logo {
   width: 195px;
   height: auto;
+}
+
+.login-form-header-title h4 {
+  position: relative;
+}
+
+.login-form-header-title h4::before {
+  position: absolute;
+  bottom: -4px;
+  left: 2px;
+  content: '';
+  display: inline-block;
+  width: 32px;
+  height: 2px;
+  background: #000;
 }

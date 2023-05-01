@@ -24,7 +24,7 @@ const LoginForm = () => {
         <CardContent>
           <div className="login-form-header px-10">
             <div className="login-form-header-title mb-9">
-              <h4 className="text-lg font-bold">登录</h4>
+              <h4 className="text-lg font-bold">注册</h4>
             </div>
             <img className="login-form-logo mx-auto" src="/assets/images/Autu-Securities@2x.png" />
           </div>
@@ -60,11 +60,8 @@ const LoginForm = () => {
               }}
               fullWidth
             />
-            <div className="text-right">
-              <Link className="text-sm text-blue-600" href="/tools">忘记密码？</Link>
-            </div>
-            <Button className="w-full mt-4 py-2 bg-blue-900 rounded-3xl" variant="contained">登录</Button>
-            <p className="text-sm text-blue-600 m-6 text-center"><Link href="/register">注册一个新账户</Link></p>
+            <Button className="w-full mt-8 py-2 bg-blue-900 rounded-3xl" variant="contained">注 册</Button>
+            <p className="text-sm text-gray-400 m-6 text-center">已经有账户了？<Link className="text-blue-600" href="/login">登录</Link></p>
           </form>
         </CardContent>
       </Card>

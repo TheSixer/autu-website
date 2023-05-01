@@ -50,7 +50,11 @@ const HeaderHome = (props) => {
       <div className="container-fluid">
         <div className="site-header-one__logo">
           <a href="/">
-            <img src="/assets/images/logo@2x.png" width="258" alt="" />
+            {
+              props.thime === 'white' ? 
+              <img src="/assets/images/Autu-Securities@2x.png" width="258" alt="" />
+              : <img src="/assets/images/logo@2x.png" width="258" alt="" />
+            }
           </a>
           <span className="side-menu__toggler" id="side-menu__toggler">
             <i className="fa fa-bars"></i>
