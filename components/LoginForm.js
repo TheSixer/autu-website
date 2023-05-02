@@ -28,7 +28,7 @@ const LoginForm = () => {
             </div>
             <img className="login-form-logo mx-auto" src="/assets/images/Autu-Securities@2x.png" />
           </div>
-          <form className="bg-white p-10 rounded-md" noValidate autoComplete="off">
+          <form className="bg-white p-6 sm:p-10 pb-0 rounded-md" noValidate autoComplete="off">
             <TextField
               id="outlined-name"
               label="*输入您的电子邮箱"

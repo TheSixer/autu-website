@@ -5,6 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import Menu from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import { FormattedMessage, useIntl } from "react-intl";
+import Link from "next/link";
 
 const HeaderHome = (props) => {
   const [sticky, setSticky] = useState(false);
@@ -33,7 +34,7 @@ const HeaderHome = (props) => {
         sticky === true ? "stricky-fixed stricked-menu" : " "
       }`}
     >
-      <div className="container-fluid">
+      <div className="py-2 sm:py-5 container-fluid">
         <div className="site-header-one__logo flex items-center">
           <a href="/">
             {
@@ -52,12 +53,12 @@ const HeaderHome = (props) => {
           <div className="main-nav__main-navigation">
             <NavLinks />
           </div>
-          <a href="#" className={`thm-btn ${props.btnClass} active`}>
+          <Link href="/register" className={`thm-btn ${props.btnClass} active`}>
             <span><FormattedMessage id="head.menu.newAccount" /></span>
-          </a>
-          <a href="#" className={`thm-btn ${props.btnClass}`}>
+          </Link>
+          <Link href="/login" className={`thm-btn ${props.btnClass}`}>
             <span><FormattedMessage id="head.menu.signIn" /></span>
-          </a>
+          </Link>
         </div>
       </div>
       <Drawer

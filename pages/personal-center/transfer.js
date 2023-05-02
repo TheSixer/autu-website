@@ -23,8 +23,8 @@ const HomePage = () => {
   return (
     <Layout>
   
-      <div className="container">
-        <div className="p-2 mb-4 sm:mb-16">
+      <div className="container p-4">
+        <div className="p-2 mb-8 sm:mb-20">
           <Link href="/personal-center" className="inline-flex items-center text-sm">
             <img className="w-4 h-4 rotate-180 mr-1" src="/assets/images/arrow.png" />
             <span>返回</span>

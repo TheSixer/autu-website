@@ -1,10 +1,15 @@
+import { useState } from 'react';
 import Layout from "@/components/PersonalCenterLayout";
+import TradingRecords from "@/components/TradingRecords";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Notifications from '@mui/icons-material/Notifications';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
 import { useRouter } from 'next/router';
 import Link from "next/link";
 
@@ -14,19 +19,54 @@ const WithdrawalIcon = () => <img src="/assets/images/personal/withdrawal.png" /
 
 const HomePage = () => {
   const router = useRouter();
+  const [open, setOpen] = useState(true);
 
   return (
     <Layout>
   
-      <div className="container">
-        <Alert severity="warning">This is a warning alert — check it out!</Alert>
-        <Alert
-          iconMapping={{
-            success: <Notifications fontSize="inherit" />,
-          }}
-        >
-          This is a success alert — check it out!
-        </Alert>
+      <div className="container pb-4">
+        <Collapse in={open}>
+          <Alert
+            severity="warning"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+            sx={{ mb: 2 }}
+          >
+            Close me!
+          </Alert>
+        </Collapse>
+        <Collapse in={open}>
+          <Alert
+            iconMapping={{
+              success: <Notifications fontSize="inherit" />,
+            }}
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+            sx={{ mb: 2 }}
+          >
+            Close me!
+          </Alert>
+        </Collapse>
         <Card className="mt-4" variant="outlined">
           <CardContent>
             <div className="flex flex-col md:flex-row">
@@ -64,6 +104,8 @@ const HomePage = () => {
               <span>交易记录</span>
               <img className="w-4 h-4" src="/assets/images/arrow.png" />
             </Link>
+
+            <TradingRecords />
           </CardContent>
         </Card>
       </div>

@@ -9,7 +9,7 @@ export default function (props) {
     <>
       <Preloader />
 
-      <Layout pageTitle="Apiton | Home Page">
+      <Layout pageTitle="Autu | Home Page">
         <Header
           thime="white"
           btnClass="main-nav__btn"
