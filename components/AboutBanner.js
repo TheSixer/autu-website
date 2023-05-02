@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { FormattedMessage } from "react-intl";
 
 const MarketBanner = (props) => {
 
@@ -9,7 +10,7 @@ const MarketBanner = (props) => {
         <Row className="justify-content-md-center">
           <Col xl={8}>
             <div className="about-banner-content wow flipInX">
-              <h4>Autu Securities是一家面向个人投资者和机构客户的全球资产在线交易平台</h4>
+              <h4 className="text-lg sm:text-xl md:text-2xl md:text-3xl"><FormattedMessage id="about.banner.title" /></h4>
             </div>
           </Col>
         </Row>

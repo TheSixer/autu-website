@@ -363,8 +363,7 @@
     width: 45px;
     height: 45px;
   }
-  .cta-three h3,
-  .block-title h3 {
+  .cta-three h3{
     font-size: 40px;
   }
   .video-one {
@@ -384,7 +383,7 @@
     margin-bottom: 0;
   }
   .site-footer__upper {
-    padding-top: 120px;
+    padding-top: 60px;
   }
   .mailchimp-one {
     padding-top: 120px;
@@ -434,8 +433,7 @@
     font-size: 22px;
     line-height: 1.4em;
   }
-  .cta-three h3,
-  .block-title h3 {
+  .cta-three h3{
     font-size: 34px;
   }
 }

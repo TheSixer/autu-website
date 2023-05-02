@@ -1,35 +1,50 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import BlockTitle from "./BlockTitle";
+import { FormattedMessage, useIntl } from "react-intl";
 
 const Testimonials = (props) => {
+  const intl = useIntl();
+
+  const title = intl.formatMessage({ id: "home.action.title" });
 
   return (
     <section className="testimonials-one">
       <Container>
-        <Row>
-          <Col xl={12}>
+        <Row className="justify-content-md-center">
+          <Col xl={10}>
             <BlockTitle
               textAlign="center"
-              titleText="Autu Securities是一家受监管的在线交易平台，通过期货、期权、CFD等衍生品工具提供投资全球几乎所有金融市场产品的投资通道，以下是在Autu Securities交易的优势"
+              titleText={title}
             />
           </Col>
-          <Col xl={6}>
-            <div className="testimonials-one__thumb-carousel-wrap wow fadeInDown">
+          <Col md={6} className="d-flex">
+            <div className="my-auto testimonials-one__thumb-carousel-wrap wow fadeInDown">
               <div className="testimonials-one__image">
                 <img src="/assets/images/home/phone@2x.png" className="move" alt="Awesome Image" />
               </div>
             </div>
           </Col>
-          <Col xl={6} className="d-flex">
+          <Col md={6} lg={5} className="d-flex">
             <div className="my-auto wow fadeInUp">
-              <h4 className="my-auto-title">低交易成本</h4>
-              <div className="testimonials-one__carousel">
-                <p className="testimonials-one__text">提供业内最具价格竞争力的无点差交易模式直连<br/>交易所降低成本<br/>透明报价历史<br/>自由选择的杠杆比例，增益资金使用效果</p>
-                <p className="testimonials-one__text primary-txt">客户的持续盈利是我们的成功的基础</p>
+              <h4 className="my-auto-title">
+                <FormattedMessage id="home.action.subtitle" />
+              </h4>
+              <div className="testimonials-one__carousel text-left">
+                <p className="testimonials-one__text">
+                  <FormattedMessage id="home.action.txt01" />
+                  <br />
+                  <FormattedMessage id="home.action.txt02" /><br />
+                  <FormattedMessage id="home.action.txt03" /><br />
+                  <FormattedMessage id="home.action.txt04" /></p>
+                <p className="testimonials-one__text primary-txt">
+                  <FormattedMessage id="home.action.txt05" />
+                </p>
               </div>
               <a href="#" className={`thm-btn main-nav__btn active`}>
-                <span>开立账户</span>
+                <span>
+                  <FormattedMessage id="head.menu.newAccount" />
+                </span>
               </a>
             </div>
           </Col>

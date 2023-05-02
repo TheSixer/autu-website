@@ -1,6 +1,5 @@
 import Layout from "../components/Layout";
 import Preloader from "../components/Preloader";
-import MobileMenu from "../components/MobileMenu";
 import Header from "../components/Header";
 import Banner from "../components/Banner";
 import Footer from "../components/Footer";
@@ -18,7 +17,6 @@ const HomePage = () => (
         btnClass="main-nav__btn"
         extraClassName="site-header-one__fixed-top"
       />
-      <MobileMenu />
       <Banner />
       <Testimonials />
       <CTATwo />
