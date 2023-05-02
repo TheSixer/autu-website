@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
 import NavLinks from "./NavLinks";
+import SideMenu from "./SideMenu";
+import Drawer from '@mui/material/Drawer';
+import Menu from '@mui/icons-material/Menu';
+import IconButton from '@mui/material/IconButton';
+import { FormattedMessage, useIntl } from "react-intl";
 
 const HeaderHome = (props) => {
   const [sticky, setSticky] = useState(false);
+  const [isShowDrawer, setIsShowDrawer] = useState();
+
+  const toggleDrawer = () => setIsShowDrawer(!isShowDrawer);
 
   const handleScroll = () => {
     if (window.scrollY > 70) {
@@ -14,32 +22,10 @@ const HeaderHome = (props) => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-    mobileMenu();
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
-  const mobileMenu = () => {
-    document
-      .querySelector("#side-menu__toggler")
-      .addEventListener("click", function (e) {
-        document.querySelector(".side-menu__block").classList.toggle("active");
-        e.preventDefault();
-      });
-
-    //Close Mobile Menu
-    let sideMenuCloser = document.querySelectorAll(
-      ".side-menu__close-btn, .side-menu__block-overlay"
-    );
-
-    sideMenuCloser.forEach((sideMenuCloserBtn) => {
-      sideMenuCloserBtn.addEventListener("click", function (e) {
-        document.querySelector(".side-menu__block").classList.remove("active");
-        e.preventDefault();
-      });
-    });
-  };
 
   return (
     <header
@@ -48,26 +34,35 @@ const HeaderHome = (props) => {
       }`}
     >
       <div className="container-fluid">
-        <div className="site-header-one__logo">
+        <div className="site-header-one__logo flex items-center">
           <a href="/">
             <img src="/assets/images/logo@2x.png" width="258" alt="" />
           </a>
-          <span className="side-menu__toggler" id="side-menu__toggler">
-            <i className="fa fa-bars"></i>
-          </span>
+          <div className="ml-2 block laptop:hidden">
+            <IconButton onClick={toggleDrawer}>
+              <Menu fontSize="large" sx={{ color: '#FFD936' }} />
+            </IconButton>
+          </div>
         </div>
         <div className="main-nav__right">
           <div className="main-nav__main-navigation">
             <NavLinks />
           </div>
           <a href="#" className={`thm-btn ${props.btnClass} active`}>
-            <span>开立账户</span>
+            <span><FormattedMessage id="head.menu.newAccount" /></span>
           </a>
           <a href="#" className={`thm-btn ${props.btnClass}`}>
-            <span>登陆</span>
+            <span><FormattedMessage id="head.menu.signIn" /></span>
           </a>
         </div>
       </div>
+      <Drawer
+        anchor="left"
+        open={isShowDrawer}
+        onClose={toggleDrawer}
+      >
+        <SideMenu toggleDrawer={toggleDrawer} />
+      </Drawer>
     </header>
   );
 };

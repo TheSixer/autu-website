@@ -1,6 +1,5 @@
 import Layout from "../components/Layout";
 import Preloader from "../components/Preloader";
-import MobileMenu from "../components/MobileMenu";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import WebSoftware from "../components/WebSoftware";
@@ -19,7 +18,6 @@ const HomePage = () => (
         btnClass="main-nav__btn"
         extraClassName="site-header-one__fixed-top"
       />
-      <MobileMenu />
       <ToolsBanner />
       <PCTradePlatform />
       <WebSoftware />

@@ -1,4 +1,5 @@
 import React from "react";
+import { FormattedMessage } from "react-intl";
 
 const MonetaryTransaction = () => {
   return (
@@ -7,21 +8,21 @@ const MonetaryTransaction = () => {
         <div className="row">
           <div className="col-lg-12">
             <div className="monetary-trans_header wow fadeInDown">
-              <h2>电脑端交易平台</h2>
-              <h4>Autu的cTrader桌面端程序具备强大的交易及复盘功能</h4>
+              <h2><FormattedMessage id="tools.action.title" /></h2>
+              <h4><FormattedMessage id="tools.action.subtitle" /></h4>
             </div>
           </div>
-          <div className="d-flex col-lg-6">
+          <div className="d-flex col-md-6">
             <div className="monetary-trans_left wow fadeInLeft">
-              <p className="monetary-trans_text">提供手动交易、算法交易、复制交易、图表功能、技术分析、市场重演等功能，供交易者复盘、分析、回测与优化</p>
-              <p className="monetary-trans_text">界面可定制，允许折叠和展开块、缩放、更改颜色图表设置和移动图表等等，全部可由用户自行操作</p>
+              <p className="monetary-trans_text"><FormattedMessage id="tools.action.txt01" /></p>
+              <p className="monetary-trans_text"><FormattedMessage id="tools.action.txt02" /></p>
             </div>
           </div>
-          <div className="d-flex col-lg-6 ">
+          <div className="d-flex col-md-6 mt-12 md:mt-0">
             <div className="monetary-trans_image wow fadeInRight">
               <img
+                className="max-w-full sm:w-96 md:w-full lg:w-4/5"
                 src="/assets/images/tools/computer@2x.png"
-                className="computer"
                 alt=""
               />
             </div>
