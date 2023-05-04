@@ -20,7 +20,7 @@ const MarketBanner = (props) => {
                 <img src="/assets/images/tools/windows@2x.png" />
                 <span><FormattedMessage id="tools.banner.windows" /></span>
               </a>
-              <a href="https://getctrader.com/autu/ctrader-autu-setup.exe" target="_blank" className="tools-banner-grid-item">
+              <a href="https://app.autu.finance" target="_blank" className="tools-banner-grid-item">
                 <img src="/assets/images/tools/website@2x.png" />
                 <span><FormattedMessage id="tools.banner.web" /></span>
               </a>
