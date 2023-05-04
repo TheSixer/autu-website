@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 
 const MarketBanner = (props) => {
 
@@ -8,11 +8,11 @@ const MarketBanner = (props) => {
     <section className="py-40">
       <Container>
         <Row className="justify-content-md-center">
-          <Col sm="9">
-            <Typography variant="h6" align="center" color="textPrimary">
+          <Col sm="8">
+            <Typography variant="h5" align="center" color="textPrimary">
               Privacy Agreement
             </Typography>
-            <Typography variant="h6" align="center" color="textPrimary" gutterBottom>
+            <Typography sx={{ mb: 6 }} variant="h5" align="center" color="textPrimary" gutterBottom>
               Confidentiality and Data Protection
             </Typography>
             <Typography variant="subtitle1" color="textPrimary" gutterBottom>
@@ -105,7 +105,7 @@ const MarketBanner = (props) => {
             <Typography variant="subtitle1" color="textPrimary" gutterBottom>
               If you have any questions or suggestions regarding this Agreement, please contact us at cs@autu.finance.
             </Typography>
-            <Typography variant="button" display="block" align="right" color="textPrimary">
+            <Typography sx={{ mt: 6 }} variant="button" display="block" align="right" color="textPrimary">
               <b>Last updated 25 April 2023</b>
             </Typography>
             <Typography variant="button" display="block" align="right" color="textPrimary" gutterBottom>
