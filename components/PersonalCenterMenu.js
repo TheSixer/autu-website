@@ -4,7 +4,6 @@ import Link from "next/link";
 
 const MobileMenu = () => {
   const { pathname } = useRouter();
-  console.log(pathname);
 
   return (
     <div className="hidden pt-36 sm:flex flex-col w-48 min-h-screen flex-none bg-white shadow">

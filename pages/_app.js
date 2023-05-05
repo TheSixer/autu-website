@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { IntlProvider } from "react-intl";
+import { SessionProvider } from 'next-auth/react';
 import en from "@/lang/en.json";
 import zh from "@/lang/zh.json";
 import '@/styles/globals.css'
@@ -14,8 +15,16 @@ export default function MyApp({ Component, pageProps }) {
   const { locale } = useRouter();
 
   return (
-    <IntlProvider locale={locale} messages={messages[locale]}>
-      <Component {...pageProps} />
-    </IntlProvider>
+    <SessionProvider
+      options={{
+        staleTime: 0,
+        refetchInterval: 0
+      }}
+      session={pageProps.session}
+    >
+      <IntlProvider locale={locale} messages={messages[locale]}>
+        <Component {...pageProps} />
+      </IntlProvider>
+    </SessionProvider>
   );
 }
