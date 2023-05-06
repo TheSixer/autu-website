@@ -6,8 +6,6 @@ const secret = process.env.NEXTAUTH_SECRET
 export async function middleware(req) {
   //获取token
   const session = await getToken({ req, secret });
-  console.log('sessionsessionsessionsession');
-  console.log(session);
   //未授权，跳转到登录页面
   if (!session) {
     return NextResponse.redirect(new URL('/login', req.url))

@@ -16,7 +16,7 @@ export default function (props) {
           extraClassName="site-header-one__fixed-top white-thime"
         />
         <MobileMenu />
-        <div className="bg-gray-50" style={{paddingTop: '76px'}}>
+        <div className="bg-gray-50 min-h-screen" style={{paddingTop: '76px'}}>
           {props.children}
         </div>
       </Layout>

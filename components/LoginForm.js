@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -9,6 +9,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Link from "next/link";
 import { useThrottleFn } from 'ahooks';
+import { ssrLogin, queryUserInfo } from '@/services';
 
 const LoginForm = ({ token }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +19,15 @@ const LoginForm = ({ token }) => {
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   }
+
+  // useEffect(() => {
+  //   initData();
+  // }, []);
+
+  // const initData = async () => {
+  //   const res = await queryUserInfo();
+  //   console.log(res);
+  // }
 
   const {
     run: handleSubmit,
@@ -37,6 +47,16 @@ const LoginForm = ({ token }) => {
       window.location.href=res.url;
     });
   });
+
+  // const {
+  //   run: handleSubmit,
+  // } = useThrottleFn(async () => {
+  //   const res = await ssrLogin({
+  //     userName,
+  //     password,
+  //   });
+  //   console.log(res);
+  // });
 
   return (
     <section className="login-form w-screen h-screen bg-scroll bg-center bg-cover">

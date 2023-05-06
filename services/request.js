@@ -1,7 +1,7 @@
 export default async (url = '', data = {}, type = 'GET') => {
-  // const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_URL // 基础路径
+  const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_URL // 基础路径
   type = type.toUpperCase(); // 请求方式小写转换成大写
-  // url = baseUrl + url; // 请求地址的拼接
+  url = baseUrl + url; // 请求地址的拼接
 
   if (type == 'GET') {
     let dataStr = ''; //数据拼接字符串
@@ -14,7 +14,7 @@ export default async (url = '', data = {}, type = 'GET') => {
     }
   }
   let requestConfig = {
-    credentials: 'same-origin',
+    credentials: 'include',
     method: type,
     headers: {
       'Accept': 'application/json',

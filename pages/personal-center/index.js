@@ -11,11 +11,29 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
 import { useRouter } from 'next/router';
+import { queryUserInfo } from '@/services';
 import Link from "next/link";
 
 const TransferIcon = () => <img src="/assets/images/personal/transfer.png" />;
 const RechargeIcon = () => <img src="/assets/images/personal/recharge.png" />;
 const WithdrawalIcon = () => <img src="/assets/images/personal/withdrawal.png" />;
+
+// export const getServerSideProps = async () => {
+  
+//   const res = await queryUserInfo();
+//   console.log(res);
+//   // 也可以直接返回 404 页面
+//   if (!res) {
+//     return {
+//       notFound: true,
+//     }
+//   }
+
+//   return {
+//     // 在组件 props 中 可以拿到 data
+//     props: res,
+//   }
+// }
 
 const HomePage = () => {
   const router = useRouter();

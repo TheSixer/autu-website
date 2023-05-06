@@ -17,7 +17,7 @@ const HeaderHome = (props) => {
   const [open, setOpen] = useState(false);
   const [sticky, setSticky] = useState(false);
   const [isShowDrawer, setIsShowDrawer] = useState();
-  const { data: session } = useSession();
+  const session = useSession();
 
   console.log(session);
 

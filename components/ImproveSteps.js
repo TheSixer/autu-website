@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Stepper from '@mui/material/Stepper';
@@ -12,6 +12,7 @@ import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector
 import BaseInfo from './BaseInfo';
 import AddressInfo from './AddressInfo';
 import CareerInfo from './CareerInfo';
+import IncomeInfo from './IncomeInfo';
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -83,11 +84,14 @@ function ColorlibStepIcon(props) {
 const steps = ['个人信息', '住址', '职业信息', '经济收入'];
 
 export default function CustomizedSteppers() {
+  const [step, setStep] = useState(2);
+
+  const handleNext = () => setStep(step + 1);
 
   return (
     <>
       <Stack className='mx-auto w-full sm:w-2/3' spacing={4}>
-        <Stepper alternativeLabel activeStep={0} connector={<ColorlibConnector />}>
+        <Stepper alternativeLabel activeStep={step} connector={<ColorlibConnector />}>
           {steps.map((label) => (
             <Step key={label}>
               <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
@@ -96,9 +100,10 @@ export default function CustomizedSteppers() {
         </Stepper>
       </Stack>
 
-      {/* <BaseInfo /> */}
-      {/* <AddressInfo /> */}
-      <CareerInfo />
+      { !step && <BaseInfo next={handleNext} />}
+      { step === 1 && <AddressInfo next={handleNext} />}
+      { step === 2 && <CareerInfo next={handleNext} />}
+      { step === 3 && <IncomeInfo />}
     </>
   );
 }

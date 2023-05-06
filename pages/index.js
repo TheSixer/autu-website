@@ -7,6 +7,23 @@ import CTATwo from "../components/CTATwo";
 import AiGift from "../components/AiGift";
 import NotraderModel from "../components/NotraderModel";
 import Testimonials from "../components/Testimonials";
+import { queryUserInfo } from '@/services';
+
+export const getStaticProps = async () => {
+  
+  const res = await queryUserInfo();
+  // 也可以直接返回 404 页面
+  if (!res) {
+    return {
+      notFound: true,
+    }
+  }
+
+  return {
+    // 在组件 props 中 可以拿到 data
+    props: res,
+  }
+}
 
 const HomePage = () => (
   <div>

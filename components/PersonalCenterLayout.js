@@ -1,11 +1,12 @@
+import { use } from 'react';
 import Layout from "@/components/Layout";
 import Preloader from "@/components/Preloader";
 import PersonalCenterMenu from "@/components/PersonalCenterMenu";
 import MobileMenu from "@/components/MobileMenu";
 import Header from "@/components/Header";
 
-
 export default function (props) {
+
   return (
     <>
       <Preloader />

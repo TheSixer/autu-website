@@ -4,7 +4,7 @@ const next = require('next')
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const devProxy = {
-  '/api': {
+  '/web': {
     target: 'http://121.43.148.169', // 端口自己配置合适的
     pathRewrite: {
       '^/api': '/api'

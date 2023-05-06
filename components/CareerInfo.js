@@ -7,19 +7,29 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
+import { useThrottleFn } from 'ahooks';
+import { saveWorkInfo } from '@/services';
 
-export default function CustomizedSteppers() {
-  const [age, setAge] = useState('');
+export default function CustomizedSteppers({ next }) {
+  const [loading, setLoading] = useState(false);
+  const [employmentStatus, setEmploymentStatus] = useState('');
+  const [industry, setIndustry] = useState('');
+  const [otherIndustry, setOtherIndustry] = useState('');
+  
+  const {
+    run: handleNext,
+  } = useThrottleFn(async () => {
+    setLoading(true);
+    const res = await saveWorkInfo({
+      employmentStatus,
+      industry,
+      otherIndustry,
+    });
+    setLoading(false);
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+    next();
+  });
 
   return (
     <>
@@ -31,15 +41,15 @@ export default function CustomizedSteppers() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={age}
+                value={employmentStatus}
                 label="*职业情况"
-                onChange={handleChange}
+                onChange={e => setEmploymentStatus(e.target.value)}
               >
-                <MenuItem value={1}>在职</MenuItem>
-                <MenuItem value={1}>自由职业</MenuItem>
-                <MenuItem value={1}>退休</MenuItem>
-                <MenuItem value={1}>学生</MenuItem>
-                <MenuItem value={1}>无职业</MenuItem>
+                <MenuItem value={'employ'}>在职</MenuItem>
+                <MenuItem value={'self-employed'}>自由职业</MenuItem>
+                <MenuItem value={'retired'}>退休</MenuItem>
+                <MenuItem value={'student'}>学生</MenuItem>
+                <MenuItem value={'unemploy'}>无职业</MenuItem>
               </Select>
             </FormControl>
             <FormControl fullWidth>
@@ -47,9 +57,9 @@ export default function CustomizedSteppers() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value={age}
+                value={industry}
                 label="*行业"
-                onChange={handleChange}
+                onChange={e => setIndustry(e.target.value)}
               >
                 <MenuItem value="会计">会计</MenuItem>
                 <MenuItem value="行政/秘书">行政/秘书</MenuItem>
@@ -77,10 +87,27 @@ export default function CustomizedSteppers() {
                 <MenuItem value="技术">技术</MenuItem>
                 <MenuItem value="电信">电信</MenuItem>
                 <MenuItem value="运输">运输</MenuItem>
+                <MenuItem value="0">其他</MenuItem>
               </Select>
             </FormControl>
+            {
+              industry == '0' ? (
+                <FormControl fullWidth>
+                  <TextField id="outlined-basic" label="*其他" variant="outlined" onChange={e => setOtherIndustry(e.target.value)} />
+                </FormControl>
+              ) : null
+            }
 
-            <Button className='mt-4 bg-blue-900' sx={{ py: 1.5 }} variant="contained">下一步</Button>
+            <Button
+              className='mt-4 bg-blue-900'
+              sx={{ py: 1.5 }}
+              variant="contained"
+              disabled={!employmentStatus || (industry == '0' && !otherIndustry) || (industry != '0' && !industry)}
+              onClick={handleNext}
+            >
+              下一步
+            </Button>
+
 
           </Stack>
         </CardContent>

@@ -111,7 +111,7 @@ const HomePage = () => {
 
               <LoadingButton
                 className='mt-4 bg-blue-900'
-                loading={false}
+                loading={true}
                 size='large'
                 loadingPosition="end"
                 variant="contained"
