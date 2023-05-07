@@ -83,8 +83,8 @@ function ColorlibStepIcon(props) {
 
 const steps = ['个人信息', '住址', '职业信息', '经济收入'];
 
-export default function CustomizedSteppers() {
-  const [step, setStep] = useState(2);
+export default function CustomizedSteppers(props) {
+  const [step, setStep] = useState(props.step);
 
   const handleNext = () => setStep(step + 1);
 
@@ -104,6 +104,7 @@ export default function CustomizedSteppers() {
       { step === 1 && <AddressInfo next={handleNext} />}
       { step === 2 && <CareerInfo next={handleNext} />}
       { step === 3 && <IncomeInfo />}
+
     </>
   );
 }

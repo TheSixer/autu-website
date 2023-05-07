@@ -10,6 +10,8 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "../api/auth/[...nextauth]"
 import { useRouter } from 'next/router';
 import { queryUserInfo } from '@/services';
 import Link from "next/link";
@@ -18,22 +20,28 @@ const TransferIcon = () => <img src="/assets/images/personal/transfer.png" />;
 const RechargeIcon = () => <img src="/assets/images/personal/recharge.png" />;
 const WithdrawalIcon = () => <img src="/assets/images/personal/withdrawal.png" />;
 
-// export const getServerSideProps = async () => {
+export const getServerSideProps = async (context) => {
   
-//   const res = await queryUserInfo();
-//   console.log(res);
-//   // 也可以直接返回 404 页面
-//   if (!res) {
-//     return {
-//       notFound: true,
-//     }
-//   }
+  const session = await getServerSession(context.req, context.res, authOptions)
+  const res = await fetch(process.env.NEXT_PUBLIC_ORIGIN_URL + '/user/info', {
+    headers: { token: session.user.accessToken }
+  });
+  const { code, data } = await res.json();
 
-//   return {
-//     // 在组件 props 中 可以拿到 data
-//     props: res,
-//   }
-// }
+  if (data.completeBaseInfo) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/personal-center/improve',
+      }
+    }
+  }
+
+  return {
+    // 在组件 props 中 可以拿到 data
+    props: data,
+  }
+}
 
 const HomePage = () => {
   const router = useRouter();

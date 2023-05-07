@@ -13,9 +13,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
+import dayjs from 'dayjs';
 import InputBase from '@mui/material/InputBase';
 import { useThrottleFn } from 'ahooks';
 import { saveBaseInfo } from '@/services';
+import { toast } from 'react-toastify';
 
 export default function CustomizedSteppers({ next }) {
   const [loading, setLoading] = useState(false);
@@ -30,7 +32,7 @@ export default function CustomizedSteppers({ next }) {
     run: handleNext,
   } = useThrottleFn(async () => {
     setLoading(true);
-    const res = await saveBaseInfo({
+    const {code} = await saveBaseInfo({
       firstName,
       lastName,
       birthDate,
@@ -38,8 +40,11 @@ export default function CustomizedSteppers({ next }) {
       phone: exPhone + phone,
     });
     setLoading(false);
-
-    next();
+    if (!code) {
+      next();
+    } else {
+      toast(code);
+    }
   });
 
   return (
@@ -55,7 +60,7 @@ export default function CustomizedSteppers({ next }) {
             </FormControl>
             <FormControl fullWidth>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker label="出生年月" value={birthDate} onChange={value => setBirthDate(value)} disableFuture />
+                <DatePicker label="出生年月" onChange={value => setBirthDate(dayjs(value).format('YYYY-MM-DD HH:mm:ss'))} disableFuture />
               </LocalizationProvider>
             </FormControl>
             <FormControl fullWidth>

@@ -3,59 +3,25 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import { ssrLogin } from '@/services';
 
 //配置next-auth，参考https://next-auth.js.org/configuration/options
-export default NextAuth({
+export const authOptions = {
   // provider配置凭证登录
   providers: [
     CredentialsProvider({
       name: 'login',
       async authorize(credentials, req) {//具体授权逻辑
         const { userName, password } = credentials;
-        const user = await ssrLogin({ userName, password });
-        if (!user?.code) {
-          // return user;
+        const { code, data } = await ssrLogin({ userName, password });
+        if (!code) {
           return {
-            info: {
-              "id": 3,
-              "userName": "longjia@163.com",
-              "completeBaseInfo": false,
-              "completeVerify": false,
-              "userAddressInfo": {
-                "haveSave": false,
-                "city": null,
-                "postcode": null,
-                "detailAddress": null
-              },
-              "baseInfo": {
-                "haveSave": false,
-                "firstName": null,
-                "lastName": null,
-                "nationality": null,
-                "birthDate": null,
-                "phone": null
-              },
-              "employmentInfo": {
-                "haveSave": false,
-                "employmentStatus": null,
-                "industry": null,
-                "otherIndustry": null
-              },
-              "financialInfo": {
-                "haveSave": false,
-                "annualIncome": null,
-                "netWorth": null,
-                "sourceOfWealth": null,
-                "expectNext12Month": null
-              },
-              "idCardInfo": {
-                "haveSave": false,
-                "cardUrl": null,
-                "auditStatus": null,
-                "failReason": null
-              }
-            }
+            name: data.userInfo.userName,
+            email: data.userInfo.userName,
+            accessToken: data.token,
+            refreshToken: data.token,
+            completeBaseInfo: data.userInfo.completeBaseInfo,
+            completeVerify: data.userInfo.completeVerify,
           }
         }
-        return { status: 'reject', ...user }
+        return { status: 'reject', code }
       }
     })
   ],
@@ -80,17 +46,28 @@ export default NextAuth({
       // // url一般为被中间件拦截之前的目标url，例如：localhost:3000/management/index，baseurl为localhost:3000，如果url不包含baseUrl，大概率是signIn回调函数重定向页面
       // if (url.startsWith(baseUrl)) return url
       // else if (url.startsWith("/")) return new URL(url, baseUrl).toString()
-      return '/personal-center/improve'
+      return '/personal-center'
     },
     async session({ session, token, user }) {
+      session.user.accessToken = token.accessToken
+      session.user.refreshToken = token.refreshToken
+      session.user.completeBaseInfo = token.completeBaseInfo
+      session.user.completeVerify = token.completeVerify
       return session
     },
-    // async jwt({token, user, account, profile}) {
-    //   console.log('get token', token)
-    //   return token
-    // }
+    async jwt({token, user, account, profile}) {
+      if (account?.type === 'credentials' && user) {
+        token.accessToken = user.accessToken
+        token.refreshToken = user.refreshToken
+        token.completeBaseInfo = user.completeBaseInfo
+        token.completeVerify = user.completeVerify
+      }
+      return token
+    }
   },
   events: {},
   theme: { colorScheme: "light" },
-  debug: true,
-})
+  debug: process.env.NODE_ENV === 'development',
+}
+
+export default NextAuth(authOptions)

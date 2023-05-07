@@ -8,11 +8,17 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { useThrottleFn } from 'ahooks';
 import { saveFinancialInfo } from '@/services';
 import { useRouter } from "next/router";
 
 export default function CustomizedSteppers() {
+  const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = useState(false);
   const [annualIncome, setAnnualIncome] = useState('');
   const [netWorth, setNetWorth] = useState('');
@@ -24,10 +30,19 @@ export default function CustomizedSteppers() {
     run: handleSubmit,
   } = useThrottleFn(async () => {
     setLoading(true);
-    const res = await saveFinancialInfo();
-    setLoading(false);
-    router.push('/personal-center/create')
+    // const res = await saveFinancialInfo({
+    //   annualIncome,
+    //   netWorth,
+    //   sourceOfWealth,
+    //   expectNext12Month,
+    // });
+    // setLoading(false);
+    setOpen(true);
   });
+
+  const handleConfirm = () => {
+    router.push('/personal-center/verify')
+  }
 
   return (
     <>
@@ -102,6 +117,27 @@ export default function CustomizedSteppers() {
           </Stack>
         </CardContent>
       </Card>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"激活账户"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            恭喜您！已完成基本信息填写，需要上传本人手持身份证照并完成审核后才能激活账户，是否前往上传？
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>暂不上传</Button>
+          <Button onClick={handleConfirm} autoFocus>
+            立即前往
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

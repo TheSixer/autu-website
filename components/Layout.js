@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
 import { animation } from '../utils';
+import { ToastContainer } from 'react-toastify';
 
 const Layout = (props) => {
   const [scrollTop, setScrollTop] = useState(false);
@@ -30,6 +31,7 @@ const Layout = (props) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{props.pageTitle}</title>
       </Head>
+      <ToastContainer />
 
       <div className="page-wrapper">{props.children}</div>
 

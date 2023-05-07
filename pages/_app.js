@@ -4,6 +4,7 @@ import { SessionProvider } from 'next-auth/react';
 import en from "@/lang/en.json";
 import zh from "@/lang/zh.json";
 import '@/styles/globals.css'
+import 'react-toastify/dist/ReactToastify.css';
 
 const messages = {
   en,

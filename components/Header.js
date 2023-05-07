@@ -14,12 +14,17 @@ import {useSession, signOut} from "next-auth/react"
 import Link from "next/link";
 
 const HeaderHome = (props) => {
-  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
   const [sticky, setSticky] = useState(false);
   const [isShowDrawer, setIsShowDrawer] = useState();
-  const session = useSession();
-
-  console.log(session);
+  const { data: session } = useSession();
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const toggleDrawer = () => setIsShowDrawer(!isShowDrawer);
 
@@ -76,12 +81,14 @@ const HeaderHome = (props) => {
             ) : (
               <Stack direction="row" alignItems="center" spacing={1}>
                 <Avatar sx={{ width: 32, height: 32 }}>H</Avatar>
-                <Typography variant="button" onClick={() => setOpen(true)}>
+                <Typography variant="button" onClick={handleClick}>
                   Heading
                 </Typography>
                 <Menu
                   id="basic-menu"
+                  anchorEl={anchorEl}
                   open={open}
+                  onClose={handleClose}
                   MenuListProps={{
                     'aria-labelledby': 'basic-button',
                   }}

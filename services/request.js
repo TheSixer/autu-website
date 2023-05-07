@@ -1,7 +1,11 @@
+import { getSession } from 'next-auth/react'
+
 export default async (url = '', data = {}, type = 'GET') => {
-  const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_URL // 基础路径
+  // const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_URL // 基础路径
   type = type.toUpperCase(); // 请求方式小写转换成大写
-  url = baseUrl + url; // 请求地址的拼接
+  // url = baseUrl + url; // 请求地址的拼接
+
+  const session = await getSession()
 
   if (type == 'GET') {
     let dataStr = ''; //数据拼接字符串
@@ -18,10 +22,11 @@ export default async (url = '', data = {}, type = 'GET') => {
     method: type,
     headers: {
       'Accept': 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      token: session?.user?.accessToken
     },
     mode: "cors", // 用来决定是否允许跨域请求  值有 三个 same-origin，no-cors（默认）以及 cores;
-    cache: "force-cache" // 是否缓存请求资源 可选值有 default 、 no-store 、 reload 、 no-cache 、 force-cache 或者 only-if-cached 。
+    // cache: "force-cache" // 是否缓存请求资源 可选值有 default 、 no-store 、 reload 、 no-cache 、 force-cache 或者 only-if-cached 。
   }
 
   if (type == 'POST') {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Link from "next/link";
 import Layout from "@/components/PersonalCenterLayout";
 import Card from '@mui/material/Card';
@@ -14,6 +14,7 @@ import { getPolicy, saveCardPic } from '@/services';
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [photoUrl, setPhotoUrl] = useState('');
+  const inputRef = useRef(null);
   
   const {
     run: handleSubmit,
@@ -26,10 +27,35 @@ const HomePage = () => {
   });
 
   const initData = async () => {
-    getPolicy().then(res => {
-      console.log(res)
-      setPhotoUrl(res);
+  }
+
+  const onChange = (e) => {
+    console.log(e.target.files[0]);
+    getPolicy().then(({data}) => {
+      console.log(data)
+      // setPhotoUrl(res);
+      uploadImg(data, e.target.files[0]);
     });
+  }
+
+  const uploadImg = (params, file) => {
+    const formdata = new FormData();
+    formdata.append('OSSAccessKeyId', params.accessid);
+    formdata.append('key', params.dir + '/' + file.name);
+    formdata.append('success_action_status', '200');
+    formdata.append('policy', params.policy);
+    formdata.append('signature', params.signature);
+    formdata.append('file', file);
+
+    fetch(params.host, {
+      method: 'POST',
+      body: formdata
+    }).then(res => res.json())
+    .then(res => {
+      console.log(res)
+    }).catch(e => {
+      console.log(e)
+    })
   }
 
   return (
@@ -49,7 +75,7 @@ const HomePage = () => {
               <p className='mt-2 mb-4 text-sm text-gray-500'>你需要提供一张手持身份证的照片</p>
 
               <IconButton className='w-full h-36 rounded-xl border border-gray-400 bg-gray-100' aria-label="upload picture" component="label">
-                <input hidden accept="image/*" type="file" />
+                <input ref={inputRef} hidden accept="image/*" type="file" onChange={onChange} />
                 <PhotoCamera fontSize='large' />
               </IconButton>
 

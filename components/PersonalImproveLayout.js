@@ -3,7 +3,6 @@ import Preloader from "@/components/Preloader";
 import MobileMenu from "@/components/MobileMenu";
 import Header from "@/components/Header";
 
-
 export default function (props) {
   return (
     <>
