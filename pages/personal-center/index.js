@@ -13,7 +13,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../api/auth/[...nextauth]"
 import { useRouter } from 'next/router';
-import { queryUserInfo } from '@/services';
 import Link from "next/link";
 
 const TransferIcon = () => <img src="/assets/images/personal/transfer.png" />;
@@ -27,23 +26,28 @@ export const getServerSideProps = async (context) => {
     headers: { token: session.user.accessToken }
   });
   const { code, data } = await res.json();
+  const response = await fetch(process.env.NEXT_PUBLIC_ORIGIN_URL + '/wallet/info', {
+    headers: { token: session.user.accessToken }
+  });
+  const { data: wallet } = await response.json();
+  console.log(data)
 
-  if (data.completeBaseInfo) {
+  if (code || !data.completeBaseInfo) {
     return {
       redirect: {
         permanent: false,
-        destination: '/personal-center/improve',
+        destination: code ? '/personal-center' : '/personal-center/improve',
       }
     }
   }
 
   return {
     // 在组件 props 中 可以拿到 data
-    props: data,
+    props: {...data, ...wallet},
   }
 }
 
-const HomePage = () => {
+const HomePage = ({ balance, userName }) => {
   const router = useRouter();
   const [open, setOpen] = useState(true);
 
@@ -98,16 +102,16 @@ const HomePage = () => {
             <div className="flex flex-col md:flex-row">
               <div className="flex-none relative">
                 <img src="/assets/images/personal/card@2x.png" width={342} />
-                <p className="absolute left-4 bottom-4 text-lg font-semibold">User Name</p>
+                <p className="absolute left-4 bottom-4 text-lg font-semibold">{ userName }</p>
               </div>
               <div className="flex flex-col justify-between flex-1 p-4 md:px-10 md:py-3.5">
                 <div className="mb-6 md:mb-0">
                   <p className="text-base text-gray-600">你的钱包</p>
-                  <p className="text-2xl font-semibold">196.00 USD</p>
+                  <p className="text-2xl font-semibold">{ balance } USD</p>
                 </div>
                 <div className="flex justify-between flex-col md:flex-row">
-                  <p className="text-base text-gray-600 font-normal">昵称: <span className="ml-4 text-gray-900">昵称</span></p>
-                  <p className="text-base text-gray-600 font-normal">cTID账号: <span className="ml-4 text-gray-900">123412341234</span></p>
+                  <p className="text-base text-gray-600 font-normal">昵称: <span className="ml-4 text-gray-900">{ userName }</span></p>
+                  <p className="text-base text-gray-600 font-normal">cTID账号: <span className="ml-4 text-gray-900">{ '-' }</span></p>
                 </div>
               </div>
             </div>

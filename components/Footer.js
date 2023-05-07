@@ -1,19 +1,58 @@
-import React, { useCallback } from "react";
+import React, { useState, useRef } from "react";
 import Vcode from 'react-vcode';
 import { FormattedMessage, useIntl } from "react-intl";
+import { useThrottleFn } from 'ahooks';
+import { saveConsult } from '@/services';
+import { toast } from 'react-toastify';
 
 const Footer = () => {
   const intl = useIntl();
 
-  const name = intl.formatMessage({ id: "footer.form.name" });
+  const nameTxt = intl.formatMessage({ id: "footer.form.name" });
   const tel = intl.formatMessage({ id: "footer.form.tel" });
-  const email = intl.formatMessage({ id: "footer.form.email" });
+  const emailTxt = intl.formatMessage({ id: "footer.form.email" });
   const recaptcha = intl.formatMessage({ id: "footer.form.recaptcha" });
   const inquiry = intl.formatMessage({ id: "footer.form.inquiry" });
 
-  const handleClick = useCallback((captcha) => {
-    console.log('captcha:', captcha);
-  }, []);
+
+  const [loading, setLoading] = useState(false);
+  const [vcode, setVcode] = useState('');
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [content, setContent] = useState('');
+  const [code, setCode] = useState('');
+  const vcodeRef = useRef(null);
+  const {
+    run: handleSubmit,
+  } = useThrottleFn(() => {
+    setLoading(true);
+    if (!name || !phone || !email || !code || !content) {
+      toast('请输入完整信息');
+      return false;
+    }
+    if (vcode.toLocaleLowerCase() !== code.toLocaleLowerCase()) {
+      toast('验证码输入有误');
+      vcodeRef.current.onClick();
+      return false;
+    }
+    saveConsult({
+      name,
+      phone,
+      email,
+      content,
+    }).then(({code}) => {
+      vcodeRef.current.onClick();
+      setName('');
+      setPhone('');
+      setEmail('');
+      setCode('');
+      setContent('');
+      toast('感谢您的反馈，您的问题已经提交，我们会及时联系您！');
+      setLoading(false);
+    });
+  });
+
   return (
     <>
       <footer className="site-footer">
@@ -42,7 +81,9 @@ const Footer = () => {
                           <input
                             type="text"
                             className="form_control"
-                            placeholder={name}
+                            placeholder={nameTxt}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                             name="name"
                             required
                           />
@@ -55,6 +96,8 @@ const Footer = () => {
                             type="tel"
                             className="form_control"
                             placeholder={tel}
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
                             name="number"
                             required
                           />
@@ -66,8 +109,10 @@ const Footer = () => {
                           <input
                             type="email"
                             className="form_control"
-                            placeholder={email}
+                            placeholder={emailTxt}
+                            value={email}
                             name="email"
+                            onChange={(e) => setEmail(e.target.value)}
                             required
                           />
                         </div>
@@ -78,12 +123,14 @@ const Footer = () => {
                           <input
                             type="text"
                             className="form_control"
+                            value={code}
                             placeholder={recaptcha}
+                            onChange={(e) => setCode(e.target.value)}
                             name="code"
                             maxLength={4}
                             required
                           />
-                          <Vcode className="verify-code" id="vcode" width={90} />
+                          <Vcode ref={vcodeRef} className="verify-code" id="vcode" width={90} onChange={(value) => setVcode(value)} />
                         </div>
                       </div>
                       <div className="form_group_grid-item">
@@ -97,13 +144,15 @@ const Footer = () => {
                             rows={3}
                             placeholder=""
                             name="message"
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
                             defaultValue={""}
                           />
                         </div>
                       </div>
                     </div>
                     <div className="form_group">
-                      <button className="main-btn primary-btn">
+                      <button className="main-btn primary-btn" onClick={handleSubmit}>
                         <FormattedMessage id="footer.form.submit" />
                       </button>
                     </div>

@@ -13,13 +13,26 @@ import TextField from '@mui/material/TextField';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
+import { useThrottleFn } from 'ahooks';
+import { createAccount } from '@/services';
 
 const HomePage = () => {
-  const [age, setAge] = useState('');
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  const [loading, setLoading] = useState(false);
+  const [leverageInCents, setLeverageInCents] = useState(1);
+  const [depositCurrency, setDepositCurrency] = useState('USD');
+  
+  const {
+    run: handleSubmit,
+  } = useThrottleFn(() => {
+    setLoading(true);
+    createAccount({
+      accountType: 'Hedging',
+      leverageInCents,
+      depositCurrency
+    }).then(({code}) => {
+      setLoading(false);
+    });
+  });
 
   return (
     <Layout>
@@ -63,9 +76,9 @@ const HomePage = () => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={age}
+                  value={leverageInCents}
                   label="杠杆"
-                  onChange={handleChange}
+                  onChange={(e) => setLeverageInCents(e.target.value)}
                 >
                   <MenuItem value={1}>1:1</MenuItem>
                   <MenuItem value={2}>1:2</MenuItem>
@@ -94,31 +107,30 @@ const HomePage = () => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={age}
+                  value={depositCurrency}
                   label="基础货币"
-                  onChange={handleChange}
+                  onChange={(e) => setDepositCurrency(e.target.value)}
                 >
-                  <MenuItem value={1}>AUD</MenuItem>
-                  <MenuItem value={1}>CHF</MenuItem>
-                  <MenuItem value={1}>EUR</MenuItem>
-                  <MenuItem value={1}>GBP</MenuItem>
-                  <MenuItem value={1}>JPY</MenuItem>
-                  <MenuItem value={1}>PLN</MenuItem>
-                  <MenuItem value={1}>USD</MenuItem>
-                  <MenuItem value={1}>ZAR</MenuItem>
+                  <MenuItem value={'AUD'}>AUD</MenuItem>
+                  <MenuItem value={'CHF'}>CHF</MenuItem>
+                  <MenuItem value={'EUR'}>EUR</MenuItem>
+                  <MenuItem value={'GBP'}>GBP</MenuItem>
+                  <MenuItem value={'JPY'}>JPY</MenuItem>
+                  <MenuItem value={'PLN'}>PLN</MenuItem>
+                  <MenuItem value={'USD'}>USD</MenuItem>
+                  <MenuItem value={'ZAR'}>ZAR</MenuItem>
                 </Select>
               </FormControl>
 
               <LoadingButton
-                className='mt-4 bg-blue-900'
-                loading={true}
-                size='large'
-                loadingPosition="end"
+                className={`mt-12 ${ !loading ? 'bg-blue-900' : ''}`}
+                loading={loading}
+                disabled={!leverageInCents || !leverageInCents}
+                sx={{ py: 1.5, borderRadius: 6 }}
                 variant="contained"
-                sx={{ py: 1.5 }}
-                fullWidth
-              >
-                <span>创建</span>
+                onClick={handleSubmit}
+                fullWidth>
+                创建
               </LoadingButton>
 
             </Stack>

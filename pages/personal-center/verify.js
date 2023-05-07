@@ -9,10 +9,36 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Chip from '@mui/material/Chip';
 import { useThrottleFn } from 'ahooks';
-import { getPolicy, saveCardPic } from '@/services';
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "../api/auth/[...nextauth]"
+import { getPolicy, saveCardPic, fetchIdCard } from '@/services';
 
-const HomePage = () => {
+export const getServerSideProps = async (context) => {
+  
+  const session = await getServerSession(context.req, context.res, authOptions)
+  const res = await fetch(process.env.NEXT_PUBLIC_ORIGIN_URL + '/user/info', {
+    headers: { token: session.user.accessToken }
+  });
+  const { code, data } = await res.json();
+
+  if (code) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/personal-center',
+      }
+    }
+  }
+
+  return {
+    // 在组件 props 中 可以拿到 data
+    props: data,
+  }
+}
+
+const HomePage = ({idCardInfo}) => {
   const [loading, setLoading] = useState(false);
+  const [localImg, setLocalImg] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
   const inputRef = useRef(null);
   
@@ -20,20 +46,18 @@ const HomePage = () => {
     run: handleSubmit,
   } = useThrottleFn(() => {
     setLoading(true);
-    saveCardPic({ photoUrl }).then(res => {
-      console.log(res)
+    saveCardPic({ photoUrl }).then(({code}) => {
       setLoading(false);
+      if (code) {
+        router.push('/personal-center');
+      }
     });
   });
 
-  const initData = async () => {
-  }
-
   const onChange = (e) => {
-    console.log(e.target.files[0]);
+    console.log(inputRef)
+    setLocalImg('file://' + e.target.value);
     getPolicy().then(({data}) => {
-      console.log(data)
-      // setPhotoUrl(res);
       uploadImg(data, e.target.files[0]);
     });
   }
@@ -46,17 +70,25 @@ const HomePage = () => {
     formdata.append('policy', params.policy);
     formdata.append('signature', params.signature);
     formdata.append('file', file);
+    setPhotoUrl(params.dir + '/' + file.name);
 
     fetch(params.host, {
       method: 'POST',
       body: formdata
-    }).then(res => res.json())
-    .then(res => {
-      console.log(res)
-    }).catch(e => {
-      console.log(e)
+    }).then(res => {
+      // fetchImg();
     })
   }
+
+  const submitImg = async () => {
+    const { data } = await fetchIdCard();
+    console.log(data);
+  }
+
+  // const fetchImg = async () => {
+  //   const { data } = await fetchIdCard();
+  //   console.log(data);
+  // }
 
   return (
     <Layout>
@@ -71,18 +103,21 @@ const HomePage = () => {
         <Card className="mt-4 mx-auto max-w-sm" variant="outlined">
           <CardContent>
             <Box className="p-4">
-              <h4 className='text-black font-semibold'>身份信息 <Chip size='small' label="success" color="success" variant="outlined" /></h4>
+              <h4 className='text-black font-semibold'>身份信息 
+              <Chip size='small' label={idCardInfo?.auditStatus === 0 ? '审核中' : idCardInfo?.auditStatus === 1 ? '审核通过' : idCardInfo?.auditStatus === 2 ? '审核被拒' : '未上传'} color="success" variant="outlined" /></h4>
               <p className='mt-2 mb-4 text-sm text-gray-500'>你需要提供一张手持身份证的照片</p>
 
               <IconButton className='w-full h-36 rounded-xl border border-gray-400 bg-gray-100' aria-label="upload picture" component="label">
                 <input ref={inputRef} hidden accept="image/*" type="file" onChange={onChange} />
-                <PhotoCamera fontSize='large' />
+                {!localImg && <PhotoCamera fontSize='large' />}
+                {localImg && <img className='w-full h-full' src={localImg} />}
               </IconButton>
+
 
               <LoadingButton
                 className={`mt-12 ${ !loading ? 'bg-blue-900' : ''}`}
                 loading={loading}
-                disabled={loading}
+                disabled={!photoUrl}
                 sx={{ py: 1.5, borderRadius: 6 }}
                 variant="contained"
                 onClick={handleSubmit}

@@ -17,7 +17,6 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Stack from '@mui/material/Stack';
 import Dialog from '@mui/material/Dialog';
-import TextField from '@mui/material/TextField';
 import InputBase from '@mui/material/InputBase';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -45,22 +44,6 @@ function createData(name, calories, fat, carbs, protein, protin, rotin) {
     rotin,
   };
 }
-
-const rows = [
-  createData('Cupcake', 305, 3.7, 67, 4.3, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9, 67, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0, 67, 4.3),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9, 67, 4.3),
-  createData('Honeycomb', 408, 3.2, 87, 6.5, 67, 4.3),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 67, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0, 67, 4.3),
-  createData('KitKat', 518, 26.0, 65, 7.0, 67, 4.3),
-  createData('Lollipop', 392, 0.2, 98, 0.0, 67, 4.3),
-  createData('Marshmallow', 318, 0, 81, 2.0, 67, 4.3),
-  createData('Nougat', 360, 19.0, 9, 37.0, 67, 4.3),
-  createData('Oreo', 437, 18.0, 63, 4.0, 67, 4.3),
-];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -96,46 +79,34 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'name',
+    id: 'login',
     numeric: false,
     disablePadding: false,
     label: '账号',
   },
   {
-    id: 'calories',
+    id: 'status',
     numeric: true,
     disablePadding: false,
     label: '昵称',
   },
   {
-    id: 'fat',
+    id: 'leverageInCents',
     numeric: true,
     disablePadding: false,
     label: '分组',
   },
   {
-    id: 'carbs',
-    numeric: true,
-    disablePadding: false,
-    label: '杠杆',
-  },
-  {
-    id: 'protein',
+    id: 'balance',
     numeric: true,
     disablePadding: false,
     label: '余额',
   },
   {
-    id: 'protin',
+    id: 'depositCurrency',
     numeric: true,
     disablePadding: false,
     label: '奖金',
-  },
-  {
-    id: 'rotin',
-    numeric: true,
-    disablePadding: false,
-    label: '货币',
   },
 ];
 
@@ -227,7 +198,7 @@ function EnhancedTableToolbar(props) {
   );
 }
 
-export default function EnhancedTable() {
+export default function EnhancedTable({data}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -268,7 +239,7 @@ export default function EnhancedTable() {
 
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(data, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage,
       ),
@@ -277,82 +248,94 @@ export default function EnhancedTable() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
+      <Paper sx={{ width: '100%', mb: 2, py: 2 }}>
+        
+        {!visibleRows.length ? (
+          <Typography variant="overline" align="center" display="block" gutterBottom>
+            暂无账户信息
+          </Typography>
+        ) : null}
         {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {visibleRows.map((row, index) => {
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                return (
-                  <TableRow
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    key={row.name}
-                  >
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                    >
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">
-                      <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
-                        <span>{row.protein}</span>
-                        <Button size="small" variant="text" onClick={handleClickOpen}>变更</Button>
-                      </Stack>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
-                        <span>{row.protin}</span>
-                        <Button size="small" variant="text" onClick={handleClickOpen}>变更</Button>
-                      </Stack>
-                    </TableCell>
-                    <TableCell align="right">{row.rotin}</TableCell>
-                    <TableCell align="center">
-                      <Button size="small" variant="outlined">修改密码</Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
+        {
+          visibleRows.length ? (
+            <>
+              <TableContainer>
+                <Table
+                  sx={{ minWidth: 750 }}
+                  aria-labelledby="tableTitle"
+                  size={dense ? 'small' : 'medium'}
                 >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+                  <EnhancedTableHead
+                    numSelected={selected.length}
+                    order={order}
+                    orderBy={orderBy}
+                    onRequestSort={handleRequestSort}
+                    rowCount={data.length}
+                  />
+                  <TableBody>
+                    {visibleRows.map((row, index) => {
+                      const labelId = `enhanced-table-checkbox-${index}`;
+
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={row.name}
+                        >
+                          <TableCell
+                            component="th"
+                            id={labelId}
+                            scope="row"
+                          >
+                            {row.name}
+                          </TableCell>
+                          <TableCell align="right">{row.login}</TableCell>
+                          <TableCell align="right">{row.status}</TableCell>
+                          <TableCell align="right">{row.leverageInCents}</TableCell>
+                          <TableCell align="right">
+                            <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
+                              <span>{row.balance}</span>
+                              <Button size="small" variant="text" onClick={handleClickOpen}>变更</Button>
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
+                              <span>{row.depositCurrency}</span>
+                              <Button size="small" variant="text" onClick={handleClickOpen}>变更</Button>
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="right">{row.rotin}</TableCell>
+                          <TableCell align="center">
+                            <Button size="small" variant="outlined">修改密码</Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {emptyRows > 0 && (
+                      <TableRow
+                        style={{
+                          height: (dense ? 33 : 53) * emptyRows,
+                        }}
+                      >
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={data.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </>
+          ) : null
+        }
       </Paper>
 
       <Dialog open={open} onClose={handleClose}>

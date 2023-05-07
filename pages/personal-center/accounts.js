@@ -4,9 +4,38 @@ import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
 import Stack from '@mui/material/Stack';
 import { useRouter } from "next/router";
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "../api/auth/[...nextauth]"
 
-const HomePage = () => {
+export const getServerSideProps = async (context) => {
+  
+  const session = await getServerSession(context.req, context.res, authOptions)
+  const res = await fetch(process.env.NEXT_PUBLIC_ORIGIN_URL + '/account/list', {
+    headers: { token: session.user.accessToken }
+  });
+  const { code, data } = await res.json();
+  console.log(data)
+
+  if (code) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/personal-center',
+      }
+    }
+  }
+
+  return {
+    // 在组件 props 中 可以拿到 data
+    props: {
+      accounts: data
+    },
+  }
+}
+
+const HomePage = ({ accounts }) => {
   const router = useRouter();
+
 
   return (
     <Layout>
@@ -16,7 +45,7 @@ const HomePage = () => {
           <h4 className="text-black font-semibold">账户管理</h4>
         </div>
 
-        <AccountList />
+        <AccountList data={accounts} />
 
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
           <Button

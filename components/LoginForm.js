@@ -43,7 +43,6 @@ const LoginForm = ({ token }) => {
         csrfToken: token
       })
     }).then(res => {
-      console.log(res.url);
       window.location.href=res.url;
     });
   });
@@ -107,7 +106,7 @@ const LoginForm = ({ token }) => {
                 fullWidth
               />
               <div className="text-right">
-                <Link className="text-sm text-blue-600" href="/tools">忘记密码？</Link>
+                <Link className="text-sm text-blue-600" href="/forget">忘记密码？</Link>
               </div>
               <Button onClick={handleSubmit} className="w-full mt-4 py-2 bg-blue-900 rounded-3xl" variant="contained">登录</Button>
               <p className="text-sm text-blue-600 m-6 text-center"><Link href="/register">注册一个新账户</Link></p>

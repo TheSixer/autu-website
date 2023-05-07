@@ -11,6 +11,7 @@ export const authOptions = {
       async authorize(credentials, req) {//具体授权逻辑
         const { userName, password } = credentials;
         const { code, data } = await ssrLogin({ userName, password });
+        console.log(data)
         if (!code) {
           return {
             name: data.userInfo.userName,

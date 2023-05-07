@@ -30,14 +30,14 @@ export default function CustomizedSteppers() {
     run: handleSubmit,
   } = useThrottleFn(async () => {
     setLoading(true);
-    // const res = await saveFinancialInfo({
-    //   annualIncome,
-    //   netWorth,
-    //   sourceOfWealth,
-    //   expectNext12Month,
-    // });
-    // setLoading(false);
-    setOpen(true);
+    const { code } = await saveFinancialInfo({
+      annualIncome,
+      netWorth,
+      sourceOfWealth,
+      expectNext12Month,
+    });
+    setLoading(false);
+    !code && setOpen(true);
   });
 
   const handleConfirm = () => {

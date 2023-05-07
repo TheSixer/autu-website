@@ -10,11 +10,11 @@ export const getServerSideProps = async (context) => {
   });
   const { code, data } = await res.json();
 
-  if (code) {
+  if (code || data?.completeBaseInfo) {
     return {
       redirect: {
         permanent: false,
-        destination: '/login',
+        destination: data?.completeBaseInfo ? '/personal-center' : '/login',
       }
     }
   }
