@@ -31,7 +31,18 @@ const Layout = (props) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{props.pageTitle}</title>
       </Head>
-      <ToastContainer />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
 
       <div className="page-wrapper">{props.children}</div>
 

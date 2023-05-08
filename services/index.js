@@ -39,3 +39,12 @@ export const createAccount = (params) => fetch('/web/account/create', params, 'p
 // 提交咨询
 export const saveConsult = (params) => fetch('/web/consult/save', params, 'post');
 
+// 忘记密码
+export const forgetPassward = (email) => fetch(`/web/forgot?email=${email}`);
+
+// 重置密码
+export const reestPassword = (params) => fetch('/web/password/reset', params, 'post');
+
+// 加签
+export const getImgUrl = (objectName) => fetch(`/web/oss/sign?objectName=${objectName}`);
+

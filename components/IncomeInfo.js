@@ -16,6 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useThrottleFn } from 'ahooks';
 import { saveFinancialInfo } from '@/services';
 import { useRouter } from "next/router";
+import LoadingButton from '@mui/lab/LoadingButton';
 
 export default function CustomizedSteppers() {
   const [open, setOpen] = React.useState(false);
@@ -39,10 +40,6 @@ export default function CustomizedSteppers() {
     setLoading(false);
     !code && setOpen(true);
   });
-
-  const handleConfirm = () => {
-    router.push('/personal-center/verify')
-  }
 
   return (
     <>
@@ -104,15 +101,16 @@ export default function CustomizedSteppers() {
               </Select>
             </FormControl>
 
-            <Button
+            <LoadingButton
               className='mt-4 bg-blue-900'
               sx={{ py: 1.5 }}
               variant="contained"
+              loading={loading}
               disabled={!annualIncome || !netWorth || !sourceOfWealth || !expectNext12Month}
               onClick={handleSubmit}
             >
               完成
-            </Button>
+            </LoadingButton>
 
           </Stack>
         </CardContent>
@@ -122,6 +120,7 @@ export default function CustomizedSteppers() {
         onClose={() => setOpen(false)}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        disableEscapeKeyDown
       >
         <DialogTitle id="alert-dialog-title">
           {"激活账户"}
@@ -132,8 +131,8 @@ export default function CustomizedSteppers() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)}>暂不上传</Button>
-          <Button onClick={handleConfirm} autoFocus>
+          <Button onClick={() => router.push('/personal-center')}>暂不上传</Button>
+          <Button onClick={() => router.push('/personal-center/verify')} autoFocus>
             立即前往
           </Button>
         </DialogActions>

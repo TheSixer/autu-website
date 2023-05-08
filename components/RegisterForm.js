@@ -10,10 +10,13 @@ import CardContent from '@mui/material/CardContent';
 import Link from "next/link";
 import { register } from '@/services';
 import { useThrottleFn } from 'ahooks';
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
 
 const LoginForm = () => {
-  const labelRef = useRef(null);
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [status, setStatus] = useState(0);
   const [email, setEmail] = useState('');
   const [password, setPassward] = useState('');
   
@@ -27,8 +30,8 @@ const LoginForm = () => {
     register({
       email,
       password
-    }).then(res => {
-      console.log(res);
+    }).then(({code}) => {
+      !code && setStatus(1);
     });
   });
 
@@ -43,43 +46,54 @@ const LoginForm = () => {
             </div>
             <img className="login-form-logo mx-auto" src="/assets/images/Autu-Securities@2x.png" />
           </div>
-          <form className="bg-white p-6 sm:p-10 pb-0 rounded-md" noValidate autoComplete="off">
-            <TextField
-              id="outlined-name"
-              label="*输入您的电子邮箱"
-              margin="normal"
-              variant="outlined"
-              onChange={e => setEmail(e.target.value)}
-              fullWidth
-            />
 
-            <TextField
-              error
-              className="mb-0"
-              type={showPassword ? 'text' : 'password'}
-              id="outlined-error"
-              label="*输入您的密码"
-              helperText="error"
-              margin="normal"
-              variant="outlined"
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="Toggle password visibility"
-                      onClick={handleClickShowPassword}
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              onChange={e => setPassward(e.target.value)}
-              fullWidth
-            />
-            <Button className="w-full mt-8 py-2 bg-blue-900 rounded-3xl" variant="contained" onClick={handleSubmit}>注 册</Button>
-            <p className="text-sm text-gray-400 m-6 text-center">已经有账户了？<Link className="text-blue-600" href="/login">登录</Link></p>
-          </form>
+          {
+            !status ? (
+              <form className="bg-white p-6 sm:p-10 pb-0 rounded-md" noValidate autoComplete="off">
+                <TextField
+                  id="outlined-name"
+                  value={email}
+                  label="*输入您的电子邮箱"
+                  margin="normal"
+                  variant="outlined"
+                  onChange={e => setEmail(e.target.value)}
+                  fullWidth
+                />
+
+                <TextField
+                  className="mb-0"
+                  value={password}
+                  type={showPassword ? 'text' : 'password'}
+                  id="outlined-error"
+                  label="*输入您的密码"
+                  margin="normal"
+                  variant="outlined"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="Toggle password visibility"
+                          onClick={handleClickShowPassword}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  onChange={e => setPassward(e.target.value)}
+                  fullWidth
+                />
+                <Button disabled={!email || !password} className="w-full mt-8 py-2 bg-blue-900 rounded-3xl" variant="contained" onClick={handleSubmit}>注 册</Button>
+                <p className="text-sm text-gray-400 m-6 text-center">已经有账户了？<Link className="text-blue-600" href="/login">登录</Link></p>
+              </form>
+            ) : (
+              <>
+                <img className="mx-auto my-4" src="/assets/images/finish@2x.png" width={128} />
+                <p className="text-base text-black text-center">注册成功，赶快去登录吧！</p>
+                <Button className="w-full my-8 py-2 rounded-3xl" variant="outlined" onClick={() => router.push('/login')}>前往登录</Button>
+              </>
+            )
+          }
         </CardContent>
       </Card>
       </div>

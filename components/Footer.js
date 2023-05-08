@@ -28,11 +28,11 @@ const Footer = () => {
   } = useThrottleFn(() => {
     setLoading(true);
     if (!name || !phone || !email || !code || !content) {
-      toast('请输入完整信息');
+      toast.warn('请填写完整信息');
       return false;
     }
     if (vcode.toLocaleLowerCase() !== code.toLocaleLowerCase()) {
-      toast('验证码输入有误');
+      toast.warn('验证码输入有误');
       vcodeRef.current.onClick();
       return false;
     }
@@ -48,7 +48,7 @@ const Footer = () => {
       setEmail('');
       setCode('');
       setContent('');
-      toast('感谢您的反馈，您的问题已经提交，我们会及时联系您！');
+      toast.success('感谢您的反馈，您的问题已经提交，我们会及时联系您！');
       setLoading(false);
     });
   });
@@ -146,7 +146,6 @@ const Footer = () => {
                             name="message"
                             value={content}
                             onChange={(e) => setContent(e.target.value)}
-                            defaultValue={""}
                           />
                         </div>
                       </div>

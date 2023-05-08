@@ -14,10 +14,14 @@ import { getServerSession } from "next-auth/next"
 import { authOptions } from "../api/auth/[...nextauth]"
 import { useRouter } from 'next/router';
 import Link from "next/link";
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-const TransferIcon = () => <img src="/assets/images/personal/transfer.png" />;
-const RechargeIcon = () => <img src="/assets/images/personal/recharge.png" />;
-const WithdrawalIcon = () => <img src="/assets/images/personal/withdrawal.png" />;
+const TransferIcon = ({disabled}) => <img style={{filter: disabled ? 'grayscale(100%)' : ''}} src="/assets/images/personal/transfer.png" />;
+const RechargeIcon = ({disabled}) => <img style={{filter: disabled ? 'grayscale(100%)' : ''}} src="/assets/images/personal/recharge.png" />;
+const WithdrawalIcon = ({disabled}) => <img style={{filter: disabled ? 'grayscale(100%)' : ''}} src="/assets/images/personal/withdrawal.png" />;
 
 export const getServerSideProps = async (context) => {
   
@@ -30,7 +34,6 @@ export const getServerSideProps = async (context) => {
     headers: { token: session.user.accessToken }
   });
   const { data: wallet } = await response.json();
-  console.log(data)
 
   if (code || !data.completeBaseInfo) {
     return {
@@ -47,14 +50,14 @@ export const getServerSideProps = async (context) => {
   }
 }
 
-const HomePage = ({ balance, userName }) => {
+const HomePage = ({ balance, userName, ctid, completeVerify }) => {
   const router = useRouter();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(!completeVerify);
 
   return (
     <Layout>
   
-      <div className="container pb-4">
+      <div className="container py-4">
         <Collapse in={open}>
           <Alert
             severity="warning"
@@ -72,29 +75,7 @@ const HomePage = ({ balance, userName }) => {
             }
             sx={{ mb: 2 }}
           >
-            Close me!
-          </Alert>
-        </Collapse>
-        <Collapse in={open}>
-          <Alert
-            iconMapping={{
-              success: <Notifications fontSize="inherit" />,
-            }}
-            action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                size="small"
-                onClick={() => {
-                  setOpen(false);
-                }}
-              >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-            sx={{ mb: 2 }}
-          >
-            Close me!
+            您还未完成身份认证，账户信息暂不可用，<a className='text-blue-600 underline' href='/personal-center/verify'>立即前往</a> 完成认证！
           </Alert>
         </Collapse>
         <Card className="mt-4" variant="outlined">
@@ -111,33 +92,38 @@ const HomePage = ({ balance, userName }) => {
                 </div>
                 <div className="flex justify-between flex-col md:flex-row">
                   <p className="text-base text-gray-600 font-normal">昵称: <span className="ml-4 text-gray-900">{ userName }</span></p>
-                  <p className="text-base text-gray-600 font-normal">cTID账号: <span className="ml-4 text-gray-900">{ '-' }</span></p>
+                  <p className="text-base text-gray-600 font-normal">cTID账号: <span className="ml-4 text-gray-900">{ ctid || '-' }</span></p>
                 </div>
               </div>
             </div>
             <Stack className="flex-col gap-4 sm:flex-row mt-6" spacing={2} direction="row">
-              <Button className="sm:w-2/6 py-2 rounded-3xl" variant="outlined" size="large" startIcon={<TransferIcon />} onClick={() => router.push('/personal-center/transfer')}>
+              <Button className="sm:w-2/6 py-2 rounded-3xl" disabled={!completeVerify} variant="outlined" size="large" startIcon={<TransferIcon disabled={!completeVerify} />} onClick={() => router.push('/personal-center/transfer')}>
                 充值
               </Button>
-              <Button className="ml-0 sm:w-2/6 py-2 rounded-3xl" variant="outlined" size="large" startIcon={<RechargeIcon />} onClick={() => router.push('/personal-center/transfer')}>
+              <Button className="ml-0 sm:w-2/6 py-2 rounded-3xl" disabled={!completeVerify} variant="outlined" size="large" startIcon={<RechargeIcon disabled={!completeVerify} />} onClick={() => router.push('/personal-center/transfer')}>
                 转账
               </Button>
-              <Button className="ml-0 sm:w-2/6 py-2 rounded-3xl" variant="outlined" size="large" startIcon={<WithdrawalIcon />} onClick={() => router.push('/personal-center/transfer')}>
+              <Button className="ml-0 sm:w-2/6 py-2 rounded-3xl" disabled={!completeVerify} variant="outlined" size="large" startIcon={<WithdrawalIcon disabled={!completeVerify} />} onClick={() => router.push('/personal-center/transfer')}>
                 提现
               </Button>
             </Stack>
           </CardContent>
         </Card>
-        <Card className="mt-4" variant="outlined">
-          <CardContent className="p-2 text-center">
-            <Link href="/" className="inline-flex items-center mx-auto text-sm">
-              <span>交易记录</span>
-              <img className="w-4 h-4" src="/assets/images/arrow.png" />
-            </Link>
 
+        <Accordion sx={{ mt: 4 }}>
+          <AccordionSummary
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Stack sx={{ mx: 'auto' }} direction="row" alignItems="center" justifyContent="center" spacing={2}>
+              <span className='text-base'>交易记录</span>
+              <img className="w-4 h-4" src="/assets/images/arrow.png" />
+            </Stack>
+          </AccordionSummary>
+          <AccordionDetails>
             <TradingRecords />
-          </CardContent>
-        </Card>
+          </AccordionDetails>
+        </Accordion>
       </div>
   
     </Layout>

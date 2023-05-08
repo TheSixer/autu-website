@@ -88,13 +88,13 @@ const headCells = [
     id: 'status',
     numeric: true,
     disablePadding: false,
-    label: '昵称',
+    label: '状态',
   },
   {
     id: 'leverageInCents',
     numeric: true,
     disablePadding: false,
-    label: '分组',
+    label: '杠杆',
   },
   {
     id: 'balance',
@@ -106,7 +106,7 @@ const headCells = [
     id: 'depositCurrency',
     numeric: true,
     disablePadding: false,
-    label: '奖金',
+    label: '货币',
   },
 ];
 
@@ -249,93 +249,79 @@ export default function EnhancedTable({data}) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2, py: 2 }}>
+        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+        <TableContainer>
+          <Table
+            sx={{ minWidth: 750 }}
+            aria-labelledby="tableTitle"
+            size={dense ? 'small' : 'medium'}
+          >
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+              rowCount={data.length}
+            />
+            <TableBody>
+              {visibleRows.map((row, index) => {
+                const labelId = `enhanced-table-checkbox-${index}`;
+
+                return (
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.name}
+                  >
+                    <TableCell align="left">
+                      <Stack direction="column">
+                        <span>cTrader</span>
+                        <span>{row.login}</span>
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="right">{row.status}</TableCell>
+                    <TableCell align="right">1:{row.leverageInCents / 100}</TableCell>
+                    <TableCell align="right">{row.balance}</TableCell>
+                    <TableCell align="right">{row.depositCurrency}</TableCell>
+                    <TableCell align="right">
+                      {/* <Button className='bg-blue-500 mr-2' size="small" variant="contained">修改密码</Button> */}
+                      <Button className='bg-yellow-500' size="small" disabled={row.status !== 'FULL_ACCESS'} variant="contained" color="warning" onClick={handleClickOpen}>入金</Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: (dense ? 33 : 53) * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        
         
         {!visibleRows.length ? (
-          <Typography variant="overline" align="center" display="block" gutterBottom>
+          <Typography sx={{ mt: 4 }} variant="overline" align="center" display="block" gutterBottom>
             暂无账户信息
           </Typography>
-        ) : null}
-        {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-        {
-          visibleRows.length ? (
-            <>
-              <TableContainer>
-                <Table
-                  sx={{ minWidth: 750 }}
-                  aria-labelledby="tableTitle"
-                  size={dense ? 'small' : 'medium'}
-                >
-                  <EnhancedTableHead
-                    numSelected={selected.length}
-                    order={order}
-                    orderBy={orderBy}
-                    onRequestSort={handleRequestSort}
-                    rowCount={data.length}
-                  />
-                  <TableBody>
-                    {visibleRows.map((row, index) => {
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={row.name}
-                        >
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                          >
-                            {row.name}
-                          </TableCell>
-                          <TableCell align="right">{row.login}</TableCell>
-                          <TableCell align="right">{row.status}</TableCell>
-                          <TableCell align="right">{row.leverageInCents}</TableCell>
-                          <TableCell align="right">
-                            <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
-                              <span>{row.balance}</span>
-                              <Button size="small" variant="text" onClick={handleClickOpen}>变更</Button>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
-                              <span>{row.depositCurrency}</span>
-                              <Button size="small" variant="text" onClick={handleClickOpen}>变更</Button>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="right">{row.rotin}</TableCell>
-                          <TableCell align="center">
-                            <Button size="small" variant="outlined">修改密码</Button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                    {emptyRows > 0 && (
-                      <TableRow
-                        style={{
-                          height: (dense ? 33 : 53) * emptyRows,
-                        }}
-                      >
-                        <TableCell colSpan={6} />
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={data.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </>
-          ) : null
-        }
+        ) : (
+          <>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={data.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </>
+        )}
       </Paper>
 
       <Dialog open={open} onClose={handleClose}>

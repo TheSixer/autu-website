@@ -2,7 +2,7 @@ import Layout from "../components/Layout";
 import Preloader from "../components/Preloader";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import ForgetForm from "../components/ForgetForm";
+import ResetForm from "../components/ResetForm";
 import { getCsrfToken } from "next-auth/react";
 
 //获取初始化csrfToken
@@ -24,7 +24,7 @@ const LoginPage = (props) => (
         btnClass="main-nav__btn"
         extraClassName="site-header-one__fixed-top"
       />
-      <ForgetForm token={props.csrfToken} />
+      <ResetForm token={props.csrfToken} />
       <Footer />
     </Layout>
   </div>

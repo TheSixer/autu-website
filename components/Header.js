@@ -11,9 +11,12 @@ import Stack from '@mui/material/Stack';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import {useSession, signOut} from "next-auth/react"
+import { useRouter } from "next/router";
+import { deepPurple } from '@mui/material/colors';
 import Link from "next/link";
 
 const HeaderHome = (props) => {
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const [sticky, setSticky] = useState(false);
@@ -35,6 +38,8 @@ const HeaderHome = (props) => {
       setSticky(false);
     }
   };
+
+  console.log(session)
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -69,7 +74,7 @@ const HeaderHome = (props) => {
             <NavLinks />
           </div>
           {
-            !session ? (
+            !session?.user ? (
               <>
                 <Link href="/register" className={`thm-btn ${props.btnClass} active`}>
                   <span><FormattedMessage id="head.menu.newAccount" /></span>
@@ -80,9 +85,11 @@ const HeaderHome = (props) => {
               </>
             ) : (
               <Stack direction="row" alignItems="center" spacing={1}>
-                <Avatar sx={{ width: 32, height: 32 }}>H</Avatar>
+                <Avatar sx={{ width: 32, height: 32, bgcolor: deepPurple[500] }}>
+                  { session?.user?.name.slice(0, 1) }
+                </Avatar>
                 <Typography variant="button" onClick={handleClick}>
-                  Heading
+                  { session?.user?.name }
                 </Typography>
                 <Menu
                   id="basic-menu"
@@ -93,6 +100,8 @@ const HeaderHome = (props) => {
                     'aria-labelledby': 'basic-button',
                   }}
                 >
+                  <MenuItem onClick={() => router.push('/personal-center')}>个人信息</MenuItem>
+                  <MenuItem onClick={() => router.push('/personal-center/verify')}>实名认证</MenuItem>
                   <MenuItem onClick={signOut}>Logout</MenuItem>
                 </Menu>
               </Stack>

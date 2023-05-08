@@ -34,16 +34,23 @@ export default function CustomizedSteppers({ next }) {
         <CardContent>
           <Stack direction="column" spacing={2} className="p-4">
             <FormControl fullWidth>
-              <TextField id="outlined-basic" label="*街道、建筑、公寓等" variant="outlined" onChange={e => setDetailAddress(e.target.value)} />
+              <TextField id="outlined-basic" label="*街道、建筑、公寓等" value={detailAddress} variant="outlined" onChange={e => setDetailAddress(e.target.value)} />
             </FormControl>
             <FormControl fullWidth>
-              <TextField id="outlined-basic" label="*邮编" variant="outlined" onChange={e => setPostcode(e.target.value)} />
+              <TextField id="outlined-basic" label="*邮编" variant="outlined" value={postcode} onChange={e => setPostcode(e.target.value)} />
             </FormControl>
             <FormControl fullWidth>
-              <TextField id="outlined-basic" label="*城市" variant="outlined" onChange={e => setCity(e.target.value)} />
+              <TextField id="outlined-basic" label="*城市" variant="outlined" value={city} onChange={e => setCity(e.target.value)} />
             </FormControl>
 
-            <Button className='mt-4 bg-blue-900' sx={{ py: 1.5 }} variant="contained" onClick={handleNext}>下一步</Button>
+            <Button
+              className='mt-4 bg-blue-900'
+              sx={{ py: 1.5 }}
+              variant="contained"
+              disabled={!detailAddress || !postcode || !city}
+              onClick={handleNext}>
+              下一步
+            </Button>
 
           </Stack>
         </CardContent>

@@ -11,7 +11,9 @@ import Chip from '@mui/material/Chip';
 import { useThrottleFn } from 'ahooks';
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "../api/auth/[...nextauth]"
-import { getPolicy, saveCardPic, fetchIdCard } from '@/services';
+import { getPolicy, saveCardPic, fetchIdCard, getImgUrl } from '@/services';
+import { useRouter } from "next/router";
+import { toast } from 'react-toastify';
 
 export const getServerSideProps = async (context) => {
   
@@ -38,25 +40,24 @@ export const getServerSideProps = async (context) => {
 
 const HomePage = ({idCardInfo}) => {
   const [loading, setLoading] = useState(false);
-  const [localImg, setLocalImg] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
-  const inputRef = useRef(null);
+  const router = useRouter();
   
   const {
     run: handleSubmit,
   } = useThrottleFn(() => {
     setLoading(true);
     saveCardPic({ photoUrl }).then(({code}) => {
-      setLoading(false);
-      if (code) {
-        router.push('/personal-center');
+      if (!code) {
+        toast.success('您的认证信息已提交，请等待审核！', {
+          autoClose: 2000,
+          onClose: () => router.push('/personal-center')
+        });
       }
     });
   });
 
   const onChange = (e) => {
-    console.log(inputRef)
-    setLocalImg('file://' + e.target.value);
     getPolicy().then(({data}) => {
       uploadImg(data, e.target.files[0]);
     });
@@ -76,7 +77,7 @@ const HomePage = ({idCardInfo}) => {
       method: 'POST',
       body: formdata
     }).then(res => {
-      // fetchImg();
+      fetchImg(`${params.dir}/${file.name}`);
     })
   }
 
@@ -85,10 +86,10 @@ const HomePage = ({idCardInfo}) => {
     console.log(data);
   }
 
-  // const fetchImg = async () => {
-  //   const { data } = await fetchIdCard();
-  //   console.log(data);
-  // }
+  const fetchImg = async (url) => {
+    const { code, data } = await getImgUrl(url);
+    !code && setPhotoUrl(data);
+  }
 
   return (
     <Layout>
@@ -108,9 +109,9 @@ const HomePage = ({idCardInfo}) => {
               <p className='mt-2 mb-4 text-sm text-gray-500'>你需要提供一张手持身份证的照片</p>
 
               <IconButton className='w-full h-36 rounded-xl border border-gray-400 bg-gray-100' aria-label="upload picture" component="label">
-                <input ref={inputRef} hidden accept="image/*" type="file" onChange={onChange} />
-                {!localImg && <PhotoCamera fontSize='large' />}
-                {localImg && <img className='w-full h-full' src={localImg} />}
+                <input hidden accept="image/*" type="file" onChange={onChange} />
+                {!photoUrl && <PhotoCamera fontSize='large' />}
+                {photoUrl && <img className='w-full h-full' src={photoUrl} />}
               </IconButton>
 
 
@@ -122,7 +123,7 @@ const HomePage = ({idCardInfo}) => {
                 variant="contained"
                 onClick={handleSubmit}
                 fullWidth>
-                创建
+                提交
               </LoadingButton>
 
             </Box>

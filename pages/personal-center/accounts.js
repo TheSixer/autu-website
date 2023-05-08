@@ -10,11 +10,14 @@ import { authOptions } from "../api/auth/[...nextauth]"
 export const getServerSideProps = async (context) => {
   
   const session = await getServerSession(context.req, context.res, authOptions)
+  const response = await fetch(process.env.NEXT_PUBLIC_ORIGIN_URL + '/user/info', {
+    headers: { token: session.user.accessToken }
+  });
+  const { data: { completeVerify } } = await response.json();
   const res = await fetch(process.env.NEXT_PUBLIC_ORIGIN_URL + '/account/list', {
     headers: { token: session.user.accessToken }
   });
   const { code, data } = await res.json();
-  console.log(data)
 
   if (code) {
     return {
@@ -28,14 +31,16 @@ export const getServerSideProps = async (context) => {
   return {
     // 在组件 props 中 可以拿到 data
     props: {
-      accounts: data
+      accounts: data || [],
+      completeVerify
     },
   }
 }
 
-const HomePage = ({ accounts }) => {
+const HomePage = ({ accounts, completeVerify }) => {
   const router = useRouter();
 
+  console.log(accounts);
 
   return (
     <Layout>
@@ -49,6 +54,7 @@ const HomePage = ({ accounts }) => {
 
         <Stack direction="row" justifyContent="center" alignItems="center" spacing={2}>
           <Button
+            disabled={!completeVerify}
             sx={{ width: 288, py: 1.5, borderRadius: 6 }}
             variant="outlined"
             size="large"

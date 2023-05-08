@@ -90,7 +90,7 @@ export default function CustomizedSteppers(props) {
 
   return (
     <>
-      <Stack className='mx-auto w-full sm:w-2/3' spacing={4}>
+      <Stack className='mx-auto w-full sm:w-2/3' sx={{ mb: 6 }} spacing={4}>
         <Stepper alternativeLabel activeStep={step} connector={<ColorlibConnector />}>
           {steps.map((label) => (
             <Step key={label}>

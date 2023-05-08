@@ -18,7 +18,7 @@ import { createAccount } from '@/services';
 
 const HomePage = () => {
   const [loading, setLoading] = useState(false);
-  const [leverageInCents, setLeverageInCents] = useState(1);
+  const [leverageInCents, setLeverageInCents] = useState(100);
   const [depositCurrency, setDepositCurrency] = useState('USD');
   
   const {
@@ -26,7 +26,7 @@ const HomePage = () => {
   } = useThrottleFn(() => {
     setLoading(true);
     createAccount({
-      accountType: 'Hedging',
+      accountType: 'HEDGED',
       leverageInCents,
       depositCurrency
     }).then(({code}) => {
@@ -80,7 +80,10 @@ const HomePage = () => {
                   label="杠杆"
                   onChange={(e) => setLeverageInCents(e.target.value)}
                 >
-                  <MenuItem value={1}>1:1</MenuItem>
+                  <MenuItem value={100}>1 : 1</MenuItem>
+                  <MenuItem value={150}>1 : 1.5</MenuItem>
+                  <MenuItem value={10000 }>1 : 100</MenuItem>
+                  {/* <MenuItem value={1}>1:1</MenuItem>
                   <MenuItem value={2}>1:2</MenuItem>
                   <MenuItem value={3}>1:3</MenuItem>
                   <MenuItem value={5}>1:5</MenuItem>
@@ -99,7 +102,7 @@ const HomePage = () => {
                   <MenuItem value={200}>1:200</MenuItem>
                   <MenuItem value={300}>1:300</MenuItem>
                   <MenuItem value={400}>1:400</MenuItem>
-                  <MenuItem value={500}>1:500</MenuItem>
+                  <MenuItem value={500}>1:500</MenuItem> */}
                 </Select>
               </FormControl>
               <FormControl sx={{ mt: 2 }} fullWidth>
@@ -111,14 +114,15 @@ const HomePage = () => {
                   label="基础货币"
                   onChange={(e) => setDepositCurrency(e.target.value)}
                 >
-                  <MenuItem value={'AUD'}>AUD</MenuItem>
+                  <MenuItem value={'USD'}>USD</MenuItem>
+                  <MenuItem value={'RMB'}>RMB</MenuItem>
+                  {/* <MenuItem value={'AUD'}>AUD</MenuItem>
                   <MenuItem value={'CHF'}>CHF</MenuItem>
                   <MenuItem value={'EUR'}>EUR</MenuItem>
                   <MenuItem value={'GBP'}>GBP</MenuItem>
                   <MenuItem value={'JPY'}>JPY</MenuItem>
                   <MenuItem value={'PLN'}>PLN</MenuItem>
-                  <MenuItem value={'USD'}>USD</MenuItem>
-                  <MenuItem value={'ZAR'}>ZAR</MenuItem>
+                  <MenuItem value={'ZAR'}>ZAR</MenuItem> */}
                 </Select>
               </FormControl>
 

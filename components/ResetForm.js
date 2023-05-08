@@ -7,13 +7,16 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Link from "next/link";
 import { useThrottleFn } from 'ahooks';
+import { reestPassword } from '@/services';
+import { useSearchParams  } from 'next/navigation';
+import { toast } from 'react-toastify';
 
-const LoginForm = ({ token }) => {
+const LoginForm = () => {
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
-  const [userName, setUserName] = useState('');
   const [password, setPassward] = useState('');
+  const [password1, setPassward1] = useState('');
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -21,20 +24,23 @@ const LoginForm = ({ token }) => {
 
   const {
     run: handleSubmit,
-  } = useThrottleFn(() => {
-    fetch('/api/auth/callback/credentials', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        userName,
-        password,
-        csrfToken: token
-      })
-    }).then(res => {
-      window.location.href=res.url;
+  } = useThrottleFn(async () => {
+    const email = searchParams.get('email');
+    const token = searchParams.get('token');
+    if (!email || !token) {
+      toast.warn('请按照正确的方式重置您的密码！');
+      return;
+    }
+    const { code } = await reestPassword({
+      email,
+      password,
+      token
     });
+    if (!code) {
+      setPassward('');
+      setPassward1('');
+      toast.success('密码已重置，请重新登录！');
+    }
   });
 
   return (
@@ -44,33 +50,21 @@ const LoginForm = ({ token }) => {
           <CardContent>
             <div className="login-form-header px-10">
               <div className="login-form-header-title mb-9">
-                <h4 className="text-lg font-bold">登录</h4>
+                <h4 className="text-lg font-bold">重置密码</h4>
               </div>
               <img className="login-form-logo mx-auto" src="/assets/images/Autu-Securities@2x.png" />
             </div>
             <form className="bg-white p-6 sm:p-10 pb-0 rounded-md" noValidate autoComplete="off">
-              <input name="csrfToken" type="hidden" defaultValue={token} />
-              <TextField
-                name="email"
-                id="outlined-name"
-                value={userName}
-                label="*输入您的电子邮箱"
-                margin="normal"
-                variant="outlined"
-                onChange={e => setUserName(e.target.value)}
-                autoFocus
-                fullWidth
-              />
 
               <TextField
                 name="passward"
                 className="mb-0"
-                value={password}
                 type={showPassword ? 'text' : 'password'}
                 id="outlined-error"
                 label="*输入您的密码"
                 margin="normal"
                 variant="outlined"
+                value={password}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -86,11 +80,35 @@ const LoginForm = ({ token }) => {
                 onChange={e => setPassward(e.target.value)}
                 fullWidth
               />
-              <div className="text-right">
-                <Link className="text-sm text-blue-600" href="/forget">忘记密码？</Link>
-              </div>
-              <Button disabled={!userName || !password} onClick={handleSubmit} className="w-full mt-4 py-2 bg-blue-900 rounded-3xl" variant="contained">登录</Button>
-              <p className="text-sm text-blue-600 m-6 text-center"><Link href="/register">注册一个新账户</Link></p>
+
+              <TextField
+                error={!!(password && password1 && password !== password1)}
+                name="passward"
+                className="mb-0"
+                type={showPassword ? 'text' : 'password'}
+                id="outlined-error"
+                value={password1}
+                label="*再次输入您的密码"
+                helperText={ password && password1 && password !== password1 ? '两次输入的密码不一致' : ''}
+                margin="normal"
+                variant="outlined"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="Toggle password visibility"
+                        onClick={handleClickShowPassword}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                onChange={e => setPassward1(e.target.value)}
+                fullWidth
+              />
+
+              <Button disabled={!password || !password1 || password !== password1} onClick={handleSubmit} className="w-full mt-4 py-2 bg-blue-900 rounded-3xl" variant="contained">确认</Button>
             </form>
           </CardContent>
         </Card>

@@ -42,8 +42,6 @@ export default function CustomizedSteppers({ next }) {
     setLoading(false);
     if (!code) {
       next();
-    } else {
-      toast(code);
     }
   });
 
@@ -53,10 +51,10 @@ export default function CustomizedSteppers({ next }) {
         <CardContent>
           <Stack direction="column" spacing={2} className="p-4">
             <FormControl fullWidth>
-              <TextField id="outlined-basic" label="*名字" variant="outlined" onChange={e => setFirstName(e.target.value)} />
+              <TextField id="outlined-basic" label="*名字" value={firstName} variant="outlined" onChange={e => setFirstName(e.target.value)} />
             </FormControl>
             <FormControl fullWidth>
-              <TextField id="outlined-basic" label="*名字" variant="outlined" onChange={e => setLastName(e.target.value)} />
+              <TextField id="outlined-basic" label="*姓氏" value={lastName} variant="outlined" onChange={e => setLastName(e.target.value)} />
             </FormControl>
             <FormControl fullWidth>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -98,12 +96,20 @@ export default function CustomizedSteppers({ next }) {
               <InputBase
                 sx={{ ml: 1, flex: 1 }}
                 placeholder="Phone"
+                value={phone}
                 inputProps={{ 'aria-label': 'Phone' }}
                 onChange={e => setPhone(e.target.value)}
               />
             </Paper>
 
-            <Button className='mt-4 bg-blue-900' sx={{ py: 1.5 }} variant="contained" onClick={handleNext}>下一步</Button>
+            <Button
+              className='mt-4 bg-blue-900'
+              sx={{ py: 1.5 }}
+              variant="contained"
+              disabled={!firstName || !lastName || !birthDate || !nationality || !phone}
+              onClick={handleNext}>
+              下一步
+            </Button>
 
           </Stack>
         </CardContent>

@@ -1,4 +1,6 @@
 import { getSession } from 'next-auth/react'
+import { toast } from 'react-toastify';
+import ErrorCode from '@/constant';
 
 export default async (url = '', data = {}, type = 'GET') => {
   // const baseUrl = process.env.NEXT_PUBLIC_ORIGIN_URL // 基础路径
@@ -37,6 +39,10 @@ export default async (url = '', data = {}, type = 'GET') => {
   try {
     const response = await fetch(url, requestConfig);
     const responseJson = await response.json();
+    const { code } = responseJson;
+    if (code) {
+      toast.error(ErrorCode[code]);
+    }
     return responseJson
   } catch (error) {
     throw new Error(error)
