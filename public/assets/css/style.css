@@ -208,11 +208,8 @@ button {
 .block-title h3 {
   margin: 0;
   color: var(--thm-white);
-  font-size: 1.875rem;
-  font-size: 30px;
   font-weight: 600;
   color: #FFFFFF;
-  line-height: 48px;
 }
 
 .bootstrap-select .btn-light:not(:disabled):not(.disabled).active,
@@ -675,11 +672,12 @@ button {
   display: flex;
   -webkit-box-align: center;
   align-items: center;
-  margin-right: 30px;
+  /* margin-right: 30px; */
 }
 
 .main-nav__main-navigation .main-nav__navigation-box > li {
-  padding: 19px 16px;
+  padding-top: 19px;
+  padding-bottom: 19px;
   position: relative;
   transition: background .4s, color .4s;
 }
@@ -753,7 +751,8 @@ button {
   border-top: 1px solid rgba(var(--thm-black), 0.3);
 }
 
-.main-nav__main-navigation .main-nav__navigation-box > li ul > li > a {
+.main-nav__main-navigation .main-nav__navigation-box > li ul > li > a,
+.main-nav__main-navigation .main-nav__navigation-box > li ul > li > span {
   display: block;
   background-color: var(--thm-primary);
   color: #000;
@@ -766,9 +765,11 @@ button {
   padding-right: 20px;
   -webkit-transition: all 500ms ease;
   transition: all 500ms ease;
+  cursor: pointer;
 }
 
-.main-nav__main-navigation .main-nav__navigation-box > li ul > li:hover > a {
+.main-nav__main-navigation .main-nav__navigation-box > li ul > li:hover > a,
+.main-nav__main-navigation .main-nav__navigation-box > li ul > li:hover > span {
   color: var(--thm-primary);
   background-color: #fff;
 }
@@ -819,7 +820,7 @@ button {
   content: '';
   display: block;
   position: absolute;
-  top: 28px;
+  top: 24px;
   left: -10px;
   width: 1px;
   height: 20px;
@@ -863,6 +864,14 @@ button {
         animation: sticky 1.2s;
 }
 
+.site-header-one.white-thime {
+  background-color: white !important;
+}
+
+.site-header-one.white-thime .main-nav__main-navigation .main-nav__navigation-box > li > a {
+  color: #000;
+}
+
 @-webkit-keyframes sticky {
 0% {
   top: -200px;
@@ -880,9 +889,9 @@ button {
 }
 }
 
-.stricked-menu .main-nav__main-navigation .main-nav__navigation-box > li {
+/* .stricked-menu .main-nav__main-navigation .main-nav__navigation-box > li {
   padding: 19px 16px;
-}
+} */
 
 /* main nav btn */
 
@@ -975,7 +984,7 @@ button {
 .tools-banner {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   background-image: url('../images/tools/tools-banner.jpg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -1095,35 +1104,64 @@ button {
 --------------------------------------------------------------*/
 
 .market-banner {
-  padding: 254px 0 136px;
   position: relative;
   height: 100vh;
+  min-height: 56.25vw;
   background-image: url('../images/market/market-banner@2x.jpg');
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
 }
 .market-banner_content {
   position: absolute;
   top: 10%;
 }
 .market-banner-title {
-  margin-bottom: 50px;
-  font-size: 30px;
+  margin-bottom: 100px;
   font-weight: 600;
   color: #FFFFFF;
-  line-height: 44px;
   text-align: center;
+}
+@media (max-width: 1280px) {
+  .futures-spot_header {
+    margin-bottom: 8rem !important;
+  }
+  .global_invest_header {
+    margin-bottom: 4rem !important;
+  }
+  .tools-banner-content {
+    margin-bottom: 4rem !important;
+  }
+  .market-banner-title {
+    margin-bottom: 4rem !important;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-align: center;
+  }
+}
+@media (max-width: 765px) {
+  .futures-spot_header {
+    margin-bottom: 4rem !important;
+  }
+  .global_invest_header {
+    margin-bottom: 2rem !important;
+  }
+  .tools-banner-content {
+    margin-bottom: 2rem !important;
+  }
+  .market-banner-title {
+    margin-bottom: 2rem !important;
+    font-weight: 600;
+    color: #FFFFFF;
+    text-align: center;
+  }
 }
 .market-banner-title span {
   color: var(--thm-primary);
 }
 
 .market-banner_list {
-  padding: 0 80px;
   display: flex;
   row-gap: 10px;
-  column-gap: 143px;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -1134,13 +1172,10 @@ button {
 }
 .market-banner_list_item img {
   margin-bottom: 15px;
-  width: 90px;
+  /* width: 90px; */
 }
-.market-banner_list_item span {
-  width: 75px;
-  height: 25px;
+.market-banner_list_item p {
   font-size: 18px;
-  font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
   color: #FFFFFF;
   line-height: 25px;
@@ -1214,9 +1249,9 @@ button {
   margin: 0 auto 80px;
 }
 
-.global_invest_currency img {
+/* .global_invest_currency img {
   max-width: 743px;
-}
+} */
 
 .global_invest_text {
   display: flex;
@@ -1282,13 +1317,13 @@ button {
   margin: auto;
 }
 
-.global_invest_image img {
+/* .global_invest_image img {
   max-width: 410px;
-}
+} */
 
-.global_invest_image img.software {
+/* .global_invest_image img.software {
   max-width: 474px;
-}
+} */
 
 .news-list {
   padding: 40px 0;
@@ -1307,7 +1342,6 @@ button {
 
 .about-banner-content h4 {
   text-align: center;
-  font-size: 30px;
   font-weight: 600;
   color: #FFFFFF;
   line-height: 44px;
@@ -1518,14 +1552,15 @@ button {
   background-repeat: no-repeat;
   background-position: bottom center;
   background-size: 100% auto;
-  background-attachment: fixed;
+  /* background-attachment: fixed; */
 }
 
 .live_broadcast_contain {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 108px;
+  padding: 20px;
+  min-height: 108px;
   background: linear-gradient(270deg, #EDF1F5 0%, #E0E4E8 50%, #F1F5F8 100%);
 }
 .live_broadcast_contain h4 {
@@ -1599,9 +1634,9 @@ button {
   max-width: 218px;
 }
 
-.monetary-trans_image img.computer {
+/* .monetary-trans_image img.computer {
   max-width: 458px;
-}
+} */
 
 .monetary-trans_list-item {
   display: flex;
@@ -1672,9 +1707,9 @@ button {
   margin: auto;
 }
 
-.futures-spot_image img {
+/* .futures-spot_image img {
   max-width: 407px;
-}
+} */
 
 .futures-spot_image img.phone_soft {
   width: 432px;
@@ -2267,10 +2302,17 @@ button {
 }
 
 .site-footer__bottom-links {
+  display: flex;
   margin-bottom: 5px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  row-gap: 10px;
+  column-gap: 20px;
 }
 
 .site-footer__bottom-links a {
+  display: inline-block;
   font-size: 14px;
   font-family: PingFangSC-Light, PingFang SC;
   font-weight: 300;
@@ -2279,9 +2321,6 @@ button {
   white-space: nowrap;
 }
 
-.site-footer__bottom-links a {
-  margin: 0 16px;
-}
 .site-footer__bottom-links a:hover {
   color: #FFFFFF;
 }
@@ -3439,37 +3478,31 @@ button {
 .swiper-home-item .text {
   position: absolute;
   color: #FFFFFF;
-  transform: translate(-50%, -50%);
 }
 
 .swiper-home-item.second .main-title {
-  top: 35%;
-  left: 22%;
-  font-size: 30px;
+  top: 23%;
+  left: 15%;
   font-weight: 600;
   color: #FFFFFF;
-  line-height: 44px;
+  text-align: left !important;
 }
 
 .swiper-home-item.second .sub-title {
-  top: 51%;
-  left: 56%;
-  font-size: 30px;
+  top: 45%;
+  right: 20%;
   font-weight: 600;
   color: #FFFFFF;
-  line-height: 44px;
-  text-align: right;
+  text-align: right !important;
 }
 
 .swiper-home-item.third .main-title {
   top: 32%;
   left: 50%;
   text-align: center;
-  font-size: 30px;
   font-weight: 600;
   color: #FFFFFF;
-  line-height: 44px;
-  white-space: nowrap;
+  transform: translate(-50%, -50%);
 }
 
 .comment-one {
@@ -4216,6 +4249,8 @@ button {
 }
 
 .cta-two__image {
+  margin-top: auto;
+  margin-bottom: auto;
   margin-left: auto;
   margin-right: 0;
 }
@@ -4740,8 +4775,8 @@ button {
 .pricing-one__inner {
   position: relative;
   overflow: hidden;
-  padding: 40px 40px 50px;
-  height: 340px;
+  padding: 20px 20px 30px;
+  /* height: 340px; */
 }
 
 .pricing-one__single h3 {
@@ -4994,6 +5029,7 @@ button {
 }
 
 .testimonials-one__carousel {
+  text-align: left;
   overflow: hidden;
 }
 
@@ -5983,4 +6019,19 @@ button {
 .login-form-logo {
   width: 195px;
   height: auto;
+}
+
+.login-form-header-title h4 {
+  position: relative;
+}
+
+.login-form-header-title h4::before {
+  position: absolute;
+  bottom: -4px;
+  left: 2px;
+  content: '';
+  display: inline-block;
+  width: 32px;
+  height: 2px;
+  background: #000;
 }
